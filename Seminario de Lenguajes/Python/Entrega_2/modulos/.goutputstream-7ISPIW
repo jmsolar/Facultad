@@ -1,0 +1,293 @@
+import pygame,sys,os,funciones,elementos,texto,tabla,random
+from pygame.locals import *
+
+pygame.init()
+pygame.display.set_mode((1000,700))
+pygame.display.set_caption('Recolector de residuos')
+
+
+
+class Pantalla():
+	def __init__(self,padre=None):
+		self.__padre = padre
+		self.__surface = pygame.Surface(pygame.display.get_surface().get_size()).convert()
+		self.__sprites = pygame.sprite.Group()
+		self.__buttons = pygame.sprite.Group()
+		self.__text = []
+		self.__cargarTexto()
+
+	def setFondo(self,img):
+		img = funciones.cargarImagen('FONDOS'+os.sep+img)
+		x = self.__surface.get_width() / 2
+		y = self.__surface.get_height() / 2
+		pos = img.get_rect(centerx=x,centery=y)
+		self.__surface.blit(img,pos)
+
+	def getTexto(self):
+		return self.__text
+
+	def agregarTexto(self,text):
+		if (isinstance(text,texto.Texto)):
+			self.__text.append(text)
+
+	def eliminarTexto(self,text):
+		self.__text.remove(text)
+
+	def __cargarTexto(self):
+		pass
+
+	def getSprites(self):
+		return self.__sprites.sprites()
+
+	def agregarSprites(self,*sprites):
+		self.__sprites.add(sprites)
+
+	def eliminarSprites(self,*sprites):
+		self.__sprites.remove(sprites)
+
+	def getBotones(self):
+		return self.__buttons.sprites()
+
+	def agregarBotones(self,*buttons):
+		self.__buttons.add(buttons)
+
+	def eliminarBotones(self,*buttons):
+		self.__buttons.remove(buttons)
+
+	def update(self):
+		screen = pygame.display.get_surface()
+		screen.blit(self.__surface,(0,0))
+		for t in self.getTexto():
+			t.imprimir(screen)
+		self.__sprites.draw(screen)
+		self.__buttons.draw(screen)
+		pygame.display.update()
+
+	def abrir(self):
+		while True:
+			for evento in pygame.event.get():
+				if evento.type==QUIT:
+					pygame.quit(); sys.exit()
+				elif evento.type==KEYDOWN and evento.key==K_ESCAPE:
+					self.cerrar()
+				else:
+					self.eventos(evento)
+					self.update()
+
+	def eventos(self,evento):
+		pass
+
+	def cerrar(self):
+		#try: self.__padre.abrir()
+		#except:
+		pygame.quit(); sys.exit()
+
+
+
+class MenuPrincipal(Pantalla):
+	def __init__(self):
+		Pantalla.__init__(self)
+		self.setFondo('menu.jpg')
+		self.__cargarTexto()
+		self.__crearPantallas()
+
+	def __cargarTexto(self):
+		self.agregarTexto(texto.Linea('NUEVO JUEGO','Action Jackson.ttf',(255,255,255),50,(None,100)))
+		self.agregarTexto(texto.Linea('EXPLICACION','Action Jackson.ttf',(255,255,255),50,(None,250)))
+		self.agregarTexto(texto.Linea('REGLAS DE JUEGO','Action Jackson.ttf',(255,255,255),50,(None,325)))
+		self.agregarTexto(texto.Linea('TABLA DE POSICIONES','Action Jackson.ttf',(255,255,255),50,(None,400)))
+		self.agregarTexto(texto.Linea('CREDITOS','Action Jackson.ttf',(255,255,255),50,(None,475)))
+		self.agregarTexto(texto.Linea('SALIR','Action Jackson.ttf',(255,255,255),50,(None,550)))
+
+	def __crearPantallas(self):
+		self.__pantallas = []
+		self.__pantallas.append(PantallaDeJuego(self))
+		self.__pantallas.append(Explicacion(self))
+		self.__pantallas.append(ReglasDeJuego(self))
+		self.__pantallas.append(PantallaTabla(self))
+		self.__pantallas.append(Creditos(self))
+
+	def eventos(self,evento):
+		if evento.type==MOUSEMOTION:
+			for t in self.getTexto():
+				if t.isOver(pygame.mouse.get_pos()):
+					t.negrita(True); t.setColor((255,0,0))
+				else:
+					t.negrita(False); t.setColor((255,255,255))
+		elif evento.type==MOUSEBUTTONDOWN and evento.button==1:
+			t = self.getTexto()
+			for i in range(len(t)):
+				if t[i].isOver(evento.pos): self.__pantallas[i].abrir()
+
+
+
+class Subpantalla(Pantalla):
+	def cerrar(self):
+		MenuPrincipal().abrir()
+
+
+
+class ReglasDeJuego(Subpantalla):
+	def __init__(self,padre):
+		Subpantalla.__init__(self,padre)
+		self.setFondo('menu.jpg')
+		self.agregarTexto(texto.Parrafo(funciones.cargarTexto('reglas.txt'),'Cinnamon Cake.ttf',(255,255,255),20,(20,20)))
+		self.agregarBotones(elementos.Boton('volver.png',(10,640)))
+
+	def eventos(self,evento):
+		if evento.type==MOUSEBUTTONDOWN and evento.button==1:
+			if self.getBotones()[0].click(evento.pos):
+				self.cerrar()
+
+
+
+class Creditos(Subpantalla):
+	def __init__(self,padre):
+		Subpantalla.__init__(self,padre)
+		self.setFondo('menu.jpg')
+		self.agregarTexto(texto.Parrafo(funciones.cargarTexto('creditos.txt'),'Cinnamon Cake.ttf',(255,255,255),20,(None,None)))
+		self.agregarBotones(elementos.Boton('volver.png',(10,640)))
+
+	def eventos(self,evento):
+		if evento.type==MOUSEBUTTONDOWN and evento.button==1:
+			if self.getBotones()[0].click(evento.pos):
+				self.cerrar()
+
+
+
+class Explicacion(Subpantalla):
+	def __init__(self,padre):
+		Subpantalla.__init__(self,padre)
+		self.setFondo('menu.jpg')
+		files = ['Explicacion_1.txt','Explicacion_2.txt','Explicacion_3.txt']
+		self.__paginas = []
+		for f in files:
+			t = funciones.cargarTexto(f)
+			p = texto.Parrafo(t,'Cinnamon Cake.ttf',(255,255,255),20,(20,20))
+			self.__paginas.append(p)
+		self.__paginaActual = 0
+		self.agregarTexto(self.__paginas[self.__paginaActual])
+		btn0 = elementos.Boton('volver.png',(10,640),'return')
+		btn1 = elementos.Boton('flecha.png',(870,650),'prev')
+		btn2 = elementos.Boton('flecha.png',(925,650),'next')
+		self.agregarBotones(btn0,btn1,btn2)
+
+	def eventos(self,evento):
+		if evento.type==MOUSEBUTTONDOWN and evento.button==1:
+			for b in self.getBotones():
+				if b.click(evento.pos) and b.getID()=='return':
+					self.cerrar()
+				elif b.click(evento.pos) and b.getID()=='prev':
+					if (self.__paginaActual > 0): self.__paginaActual-=1
+				elif b.click(evento.pos) and b.getID()=='next':
+					if (self.__paginaActual < len(self.__paginas)-1): self.__paginaActual+=1
+			t = self.getTexto()[0]
+			self.eliminarTexto(t)
+			self.agregarTexto(self.__paginas[self.__paginaActual])
+
+
+
+class PantallaTabla(Subpantalla):
+	def __init__(self,padre):
+		Subpantalla.__init__(self,padre)
+		self.setFondo('menu.jpg')
+		self.agregarBotones(elementos.Boton('volver.png',(10,640)))
+		self.imprimirTabla()
+
+	def __cargarTexto(self):
+		self.agregarTexto(texto.Linea('Posicion','Bubbleboy.ttf',(255,255,255),20,(150,15)))
+		self.agregarTexto(texto.Linea('Nombre','Bubbleboy.ttf',(255,255,255),20,(250,15)))
+		self.agregarTexto(texto.Linea('Puntos','Bubbleboy.ttf',(255,255,255),20,(350,15)))
+		self.agregarTexto(texto.Linea('Fecha','Bubbleboy.ttf',(255,255,255),20,(450,15)))
+		self.agregarTexto(texto.Linea('Nivel','Bubbleboy.ttf',(255,255,255),20,(650,15)))
+		self.agregarTexto(texto.Linea('Tiempo','Bubbleboy.ttf',(255,255,255),20,(750,15)))
+
+	def imprimirTabla(self):
+		t = tabla.TablaDePosiciones()
+		t.cargar()
+		y = 100; pos = 1
+		for j in t.getJugadores():
+			self.agregarTexto(texto.Linea(str(pos),'Bubbleboy.ttf',(255,255,255),20,(150,y)))
+			self.agregarTexto(texto.Linea(j.getNombre(),'Bubbleboy.ttf',(255,255,255),20,(250,y)))
+			self.agregarTexto(texto.Linea(str(j.getPuntaje()),'Bubbleboy.ttf',(255,255,255),20,(350,y)))
+			self.agregarTexto(texto.Linea(str(j.getFecha()),'Bubbleboy.ttf',(255,255,255),20,(450,y)))
+			self.agregarTexto(texto.Linea(str(j.getNivel()),'Bubbleboy.ttf',(255,255,255),20,(650,y)))
+			self.agregarTexto(texto.Linea(str(j.getTiempo()),'Bubbleboy.ttf',(255,255,255),20,(750,y)))
+			y+=80; pos+=1
+
+	def eventos(self,evento):
+		if ((evento.type==MOUSEBUTTONDOWN) and (evento.button==1)):
+			if self.getBotones()[0].click(evento.pos):
+				self.cerrar()
+
+
+###############################################################################################################################
+class PantallaDeJuego(Subpantalla):
+	def __init__(self,padre,jugador=None):
+		Subpantalla.__init__(self,padre)
+		#self.__cont = 0
+		#self.__segs = 0
+		#self.__jugador = tabla.Jugador('Nombre',126598)
+		self.setFondo('menu.jpg')
+		self.__reloj = pygame.time.Clock()
+		self.__tiempo = 0
+		self.__puntaje = 0
+		self.__nivel = 0
+		self.__cargarTexto()
+		self.__crearElementos()
+
+	def __cargarTexto(self):
+		self.agregarTexto(texto.Linea('Nivel','Airstrip Four.ttf',(255,255,255),20,(0,50)))
+		self.agregarTexto(texto.Linea('Puntos','Airstrip Four.ttf',(255,255,255),20,(0,100)))
+		self.agregarTexto(texto.Linea(str(self.__nivel),'Airstrip Four.ttf',(255,255,255),20,(60,50)))
+		self.agregarTexto(texto.Linea(str(self.__puntaje),'Airstrip Four.ttf',(255,255,255),20,(30,75)))
+
+	def __crearElementos(self):
+		self.__contenedores = pygame.sprite.Group()
+		self.__avion = elementos.Avion()
+		cont1 = elementos.Contenedor('gris.png',(800,560),'A')
+		cont2 = elementos.Contenedor('verde.png',(450,560),'B')
+		cont3 = elementos.Contenedor('azul.png',(100,560),'C')
+		self.__contenedores.add(cont1,cont2,cont3)
+		self.agregarSprites(self.__avion,self.__contenedores.sprites())
+		self.agregarSprites(elementos.Tipito((0,5)),elementos.Tipito((20,5)),elementos.Tipito((40,5)))
+
+	def eventos(self,evento):
+		self.update()
+		while True: pass
+		num = random.randint(0,2)
+		res = self.__contenedores.sprites()[num].getResiduos()[0]
+		self.agregarSprites(res)
+		pos = (0,0)
+		while True:
+			self.__cont += self.__reloj.tick(20)
+			self.__avion.volar()
+			res.mover(pos)
+			if self.__cont >= 1000:
+				self.__cont -= 1000
+				self.__segs += 1
+				#print self.__segs
+			if self.__segs >= 90:
+				if self.__jugador.getNivel()<3 and self.__jugador.getPuntaje()>0:
+					self.__jugador.incNivel()
+			print num
+			if pygame.sprite.collide_rect(res,self.__contenedores.sprites()[num]) or res.getPosicion()[1] > 650:
+				res.kill()
+				pos = (0,0)
+				num = None
+				num = random.randint(0,2)
+				print num
+				res = self.__contenedores.sprites()[num].getResiduos()[0]
+				self.agregarSprites(res)
+				if pygame.sprite.collide_rect(res,self.__contenedores.sprites()[num]):
+					self.__jugador.incPuntaje(10)
+				else:
+					self.__jugador.incPuntaje(-10)
+			eventos = pygame.event.get()
+			for e in eventos:
+				if ((e.type==KEYDOWN) and (e.key==K_t)):
+					res.setPosicion((self.__avion.getPosicion()[0],0))
+					pos = (0,5)
+			self.getTexto()[3].setTexto(str(self.__jugador.getPuntaje()))
+			self.getTexto()[2].setTexto(str(self.__jugador.getNivel()))
+			self.update()

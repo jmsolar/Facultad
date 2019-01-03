@@ -1,0 +1,32 @@
+Reglas generales
+
+Cada resultado (proveniente de la resolución de una cuenta) aparecerá desde la parte superior de la pantalla, cada uno 
+de estos debe encestarse en un correspondiente recipiente. Para esto debe resolverse la cuenta y llevarla hasta el
+recipiente deseado. Entonces encestando incorrectamente se restarán puntos. Para los resultados no encestados solo 
+se restarán puntos y vidas los bien encestado sumarán puntos. Habrá un tiempo límite por cada nivel y este podría variar 
+dependiendo de la dificultad del mismo.
+
+El juego posee distintos niveles de dificultad.
+
+Nivel 1: Este primer nivel no presenta dificultad alguna. Solo deben resolverse las cuentas y encestarlas correctamente.
+
+Nivel 2: En este nivel las cuentas tendrán un color de fuente de alguno de los recipientes en los que encestar. Con esto
+se intentará engañar la vista del jugador.
+
+Nivel 3: Para este nivel aparecerán objetos que no serán cuentas. La idea es librarse lo más rápido posible de estos
+para no perder tiempo y poder tener el mayor tiempo de jugabilidad. Además de esto se le agrega la dificultad del
+nivel anterior.
+
+Para todos los niveles se respeta lo siguiente:
+
+Los resultados encestados correctamente suman 7 (siete) puntos.
+Los resultados encestados incorrectamente restan 5 (cinco) puntos.
+Los errores encestados restan 1 (uno) vida y 3 (tres) puntos.
+Los errores no encestados no suman ni restan puntos y vidas.
+Se avanza de nivel cuando se haya acabado el tiempo de juego o si la cantidad de vidas es mayor a 0. 
+En cada nivel nuevo se recuperan las 3 (tres) vidas.
+
+Función de las teclas:
+
+ARRIBA, ABAJO, DERECHA, IZQUIERDA --> Mueve la cuenta sobre la pantalla según la tecla presionada.
+ESC --> Sale de la partida.

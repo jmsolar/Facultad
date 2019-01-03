@@ -1,0 +1,78 @@
+class Elemento(pygame.sprite.Sprite):
+	def __init__(self,img,pos,ID=None):
+		pygame.sprite.Sprite.__init__(self)
+		self.__ID__ = ID
+		self.image = img
+		self.rect = self.image.get_rect(left=pos[0],top=pos[1])
+
+	def getID(self):
+		return self.__ID__
+
+	def getPosicion(self):
+		return (self.rect.left,self.rect.top)
+
+	def setPosicion(self,pos):
+		self.rect.left = pos[0]
+		self.rect.top = pos[1]
+
+	def getImagen(self):
+		return self.image
+
+
+
+class Boton(Elemento):
+	def isOver(self,point):
+		try: return self.rect.collidepoint(point)
+		except: return False
+
+
+
+class Contenedor(Elemento):
+	def __init__(self,img,pos,ID):
+		Elemento.__init__(self,img,pos)
+		self.__residuos = pygame.sprite.Group()
+
+	def depositarResiduo(self,res):
+		ok = False
+		if (self.__residuos.has(res)): ok = True
+		res.kill()
+		return ok
+
+	def agregarResiduos(self,*res):
+		self.__residuos.add(res)
+
+
+
+class ElementoMovil(Elemento):
+	def __init__(self,img,pos,ID=None):
+		Elemento.__init__(self,img,pos,ID)
+		self.__area = pygame.display.get_surface().get_rect()
+
+	def mover(self,pos):
+		self.rect.move_ip(pos)
+
+
+
+class Residuo(ElementoMovil):
+	def mover(self,pos):
+		if ((not self.__area.contains(pos)) and (pos[y]>20)):
+			Elemento.mover(pos)
+
+
+
+class Avion(ElementoMovil):
+	def __init__(self):
+		ElementoMovil.__init__(self,cargarImagen('avion'),(-10,15),'avion')
+
+	def mover(self):
+		x = 5
+		pos = self.rect.move((x, 0))
+		if (not self.__area.contains(pos)):
+			#if (self.rect.left < self.area.left):
+			#	self.image = pygame.transform.flip(self.image, 1, 0)
+			#if (self.rect.right > self.area.right):
+			#	self.image()
+			self.image = pygame.transform.flip(self.image, 1, 0)
+			x = -x
+			pos = self.rect.move((x, 0))
+		self.mover(pos)

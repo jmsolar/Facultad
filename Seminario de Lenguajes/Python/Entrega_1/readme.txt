@@ -1,0 +1,17 @@
+Se dispone de un menú principal para selección de opciones sobre el calendario, las cuales son:
+
+* agregar un cumpleaños
+* borrar un cumpleaños 
+* buscar un cumpleaños, tanto sea por nombre del cumpleañero o fecha de cumpleaños
+* exportar a archivo iCal
+
+Cada opción a su vez presenta un menú interno con opciones a elegir según sea el caso.
+El archivo generado por el módulo exportar se denomina exportado.iCal
+Mientras que el archivo encriptado con la información del calendario se denomina MiCalendario.txt
+
+Para la exportación del archivo iCal se utilizó la librería iCalendar en la versión 3.4 descargada desde el sitio oficial.
+
+La estructura del calendario está pensada para acelerar las operaciones de agregado, borrado y búsqueda de datos. 
+
+Modo de encriptación: Utilización de ord() y char().
+
