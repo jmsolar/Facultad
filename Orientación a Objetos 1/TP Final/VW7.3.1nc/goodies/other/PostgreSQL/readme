@@ -1,0 +1,34 @@
+Copyright (C) 2000 - 2004  Bruce Badger (bbadger@openskills.com)
+
+This is version 1.3-014 of the PostgreSQL Library for VisualWorks Smalltalk.
+Tested with VisualWorks 7.x & PostgreSQL 7.4.x
+
+This file is intended to be viewed from a VisualWorks text editor.  Tabbing may look wierd otherwise.
+
+The library is made up of five parcels:
+
+	PostgreSQLVWCompatibility -		A mapping library containing wrappers for
+									base code which has different implementation
+									in different Smalltalk dialects.
+	PostgreSQLDriver -				The (hopefuly) dialect independent driver layer.
+	PostgreSQLLogging -			Support for logging (tracing) message traffic between
+									the driver running in a client and the PostgreSQL 
+									backend.
+	Base64Encoding - 				An implementation of the Base64 MIME encoding
+									used to manipulate BLOB type data.
+	PostgreSQLEXDI - 				Mapping from the VisualWorks EXDI layer to the
+									driver layer.
+	StoreForPostgreSQL - 			Enables the use of the Store SCM with PostgreSQL
+									using the EXDI & driver layers.
+
+
+To get started, load the parcels and look at the class side test methods of:
+	PostgreSQLTest in the parcel PostgreSQLDriver
+	PostgreSQLEXDITest in the parcel PostgreSQLEXDI
+	PostgreSQLLoggingTesting in the logging parcel
+
+Have a look at the parcel comments for each parcel.
+
+Visit http://wiki.cs.uiuc.edu/VisualWorks/PostgreSQL+Libraries for documentation (including how to obtain and install PostgreSQL itself) and recent news.
+
+NOTE: The PostgreSQL monitor parcel contains an experimental UI for monitoring PostgreSQL connections.  Use with care, and comment freely :-)

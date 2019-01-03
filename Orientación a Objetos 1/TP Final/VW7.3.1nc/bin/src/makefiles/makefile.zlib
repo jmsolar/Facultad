@@ -1,0 +1,51 @@
+# * SccsId is "@(#)makefile.zlib	58.10 04/06/05";*/
+# ************************************************************************
+# * File: makefile.ext
+# *
+# * Subsystem makefile for zlib (de)compression package.
+# *
+# ************************************************************************
+#
+SUBSYS= zlib
+SUBSYSDIR= $(HPSSDIR)/zlib
+
+OBJS= \
+adler32.$(OBJ) \
+compress.$(OBJ) \
+crc32.$(OBJ) \
+deflate.$(OBJ) \
+gzio.$(OBJ) \
+infblock.$(OBJ) \
+infcodes.$(OBJ) \
+inffast.$(OBJ) \
+inflate.$(OBJ) \
+inftrees.$(OBJ) \
+infutil.$(OBJ) \
+trees.$(OBJ) \
+uncompr.$(OBJ) \
+zutil.$(OBJ)
+
+CSRCS= \
+adler32.c \
+compress.c \
+crc32.c \
+deflate.c \
+gzio.c \
+infblock.c \
+infcodes.c \
+inffast.c \
+inflate.c \
+inftrees.c \
+infutil.c \
+trees.c \
+uncompr.c \
+zutil.c
+
+### Subsystem target.
+
+$(SUBSYS).o: $& $(OBJS)
+	$(LD) $(LDFLAGS) -o $@ $(OBJS)
+
+include src/makefiles/makefile.include
+
+include zlib.dep

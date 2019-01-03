@@ -1,0 +1,40 @@
+# SccsId is @(#)mac.fast.makefile.vw7	58.10 04/06/05
+#==================
+#
+# Top-level makefile for HPS on PowerPC MacOS.  This makefile provides tailored
+# definitions that adapt the main makefile makefile.vw7 to make the various
+# debug engine executables, libraries and sundry support executables.
+
+# Required Definitions
+#
+# HPSSRC is the root of the source tree; can be set in Worksheet
+# HPSSRC=SourceDrive:hpsNext:src:
+#
+# PLATFORM is the target platform to make; platMac or platPowerMac, and pulls in
+# HPSSRC:makeplat:mac:{PLATFORM}.make to define the platform's processor, the
+# compiler to use and so on.
+
+PLATFORM=platPowerMac
+
+# the compilation flags for C files, and the check-map C files respectively.
+COPT=-sym full
+CDBGOPT=-opt speed
+
+# Optional Definitions
+#
+# BASEDEFS, basic definitions for engine compilation
+BASEDEFS=-D FIRENZE -D TARGET_API_MAC_OS8=1
+#
+# OPTDEFS, optional defines for engine compilation
+#	OE_PROFILE,for the engine profiler
+#	MEASURE, send measurements, INSTR, gc measurements, TIMING, scavenge timing
+OPTDEFS=-D HOST_CURSORS
+# DEBUGDEFS, to compile an assert engine
+DEBUGDEFS=  #-D ASSERT  -D assertsOn=1 -D DEBUG
+
+
+# default target(s).  Delete those not required
+#
+all	ÄÄ	engine enginelib
+
+!include "{HPSSRC}makeplat:mac:makefile.vw7"

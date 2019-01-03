@@ -1,0 +1,79 @@
+# * SccsId is @(#)makefile.platSolaris4	58.10 04/06/05
+# ************************************************************************
+# * File: makefile.platSolaris4
+# *
+# * Subsystem makefile for HPS Sun 4 (SPARC) Solaris platform.
+# *
+# *	Copyright (C) 1999 Cincom Systems, Inc.
+# *	Santa Clara, California.  All Rights Reserved.
+# *
+# *	UNPUBLISHED, CONFIDENTIAL AND PROPRIETARY.
+# ************************************************************************
+#
+SUBSYS= plat
+SUBSYSDIR= $(HPSSDIR)/plat
+
+OBJS=\
+sparcIcache.$(OBJ) \
+nilLeave.$(OBJ) \
+nilPlat.$(OBJ) \
+dlopenDynamicLoad.$(OBJ) \
+sun5CallCglue.$(OBJ) \
+sun5CallSuncc.$(OBJ) \
+sun5Callback.$(OBJ) \
+sparcIflush.$(OBJ) \
+svr4MapFile.$(OBJ) \
+svr4Sig.$(OBJ) \
+unxAlarm.$(OBJ) \
+unxDir.$(OBJ) \
+unxECode.$(OBJ) \
+unxError.$(OBJ) \
+unxHerald.$(OBJ) \
+unxIpc.$(OBJ) \
+unxLoadGUI.$(OBJ) \
+unxMain.$(OBJ) \
+unxMem.$(OBJ) \
+unxProc.$(OBJ) \
+unxSock.$(OBJ) \
+unxUtil.$(OBJ) \
+usvFile.$(OBJ) \
+usvMisc.$(OBJ) \
+usvSerial.$(OBJ) \
+usvTime.$(OBJ)
+
+CSRCS=\
+sparcIcache.c \
+nilLeave.c \
+nilPlat.c \
+dlopenDynamicLoad.c \
+sun5CallSuncc.c \
+sun5Callback.c \
+svr4MapFile.c \
+svr4Sig.c \
+unxAlarm.c \
+unxDir.c \
+unxECode.c \
+unxError.c \
+unxHerald.c \
+unxIpc.c \
+unxLoadGUI.c \
+unxMain.c \
+unxMem.c \
+unxProc.c \
+unxSock.c \
+unxUtil.c \
+usvFile.c \
+usvMisc.c \
+usvSerial.c \
+usvTime.c
+
+SSRCS= sun5CallCglue.s sparcIflush.s
+
+### Subsystem target.
+
+$(SUBSYS).$(OBJ): $(OBJS)
+	$(LD) $(LDFLAGS) -o $@ $(OBJS)
+
+include src/makefiles/makefile.include
+
+include plat.dep

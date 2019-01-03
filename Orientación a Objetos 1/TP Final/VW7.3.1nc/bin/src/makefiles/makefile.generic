@@ -1,0 +1,300 @@
+# * SccsId is  @(#)makefile.generic	58.10 04/06/05
+# * ************************************************************************
+# * File: makefile.generic
+# *
+# * Makefile for the whole shebang
+# *	The file which includes this should define:
+# *		PROCESSOR
+# *		PLATFORM
+# *		COPTS/CFLAGS
+# * 	    	LDFLAGS
+# * 	    	LIBRARIES
+# * 	    	OBJ   string which is the standard object filename extension
+# *		PRIM-INLINE	optional inline library for prim subsystem
+# *
+# *	Copyright (C) 1999 Cincom Systems, Inc.
+# *	Santa Clara, California.  All Rights Reserved.
+# *
+# *	UNPUBLISHED, CONFIDENTIAL AND PROPRIETARY.
+# * ************************************************************************
+#
+### The default installed name
+#NAME= $(PLATFORM)
+
+### Special global defines
+SDEFS=
+
+### Base directory of sources.
+HPSSDIR= src
+
+### Base directory of makefiles
+MAKEDIR= $(HPSSDIR)/makefiles
+
+### Basic name of all the subsystems.
+ALLSUBSYS= ext prim mman stack tran plat extgui platgui $(ZLIBSUBSYS)
+
+### All the modules.
+OBJS= ext.$(OBJ) prim.$(OBJ) mman.$(OBJ) stack.$(OBJ) tran.$(OBJ) plat.$(OBJ) $(ZLIBOBJ)
+GUIOBJS= extgui.$(OBJ) platgui.$(OBJ)
+UPDUMMY= prUdummy.$(OBJ)
+UPLGDUMMY= prUGdummy.$(OBJ)
+UPRIMS= prUsrSupport.$(OBJ)
+
+### Subsystem make options
+BASEOPTIONS= HPSSDIR=$(HPSSDIR) MAKEDIR=$(MAKEDIR) CDEFS="$(CDEFS)" USG=$(USG) \
+	COPTS="$(COPTS)" CDBGOPT="$(CDBGOPT)" SDEFS="$(SDEFS)" PLATFORM=$(PLATFORM)\
+	CC=$(CC) SHELL=$(SHELL)
+
+OPTIONS= $(BASEOPTIONS) LDFLAGS="$(LDFLAGS)" OBJ=$(OBJ) $(PLATOPTS) ASFLAGS="$(ASFLAGS)"
+
+BASEGUILIBOPTIONS= HPSSDIR=$(HPSSDIR) MAKEDIR=$(MAKEDIR) CDEFS="$(CDEFS)" USG=$(USG) \
+	COPTS="$(COPTS) $(GUILIBCOPTS)" CDBGOPT="$(CDBGOPT)" SDEFS="$(SDEFS)" PLATFORM=$(PLATFORM)\
+	CC=$(CC) SHELL=$(SHELL)
+
+GUILIBOPTIONS= $(BASEGUILIBOPTIONS) LDFLAGS="$(LDFLAGS)" OBJ=$(OBJ) $(PLATOPTS) ASFLAGS="$(ASFLAGS)"
+
+.PRECIOUS: platgui.dep plat.dep extgui.dep ext.dep stack.dep prim.dep tran.dep mman.dep
+
+# this is the default.  compile anything out of date and link a new engine
+# Note that any existing engine is unlinked (removed) so that recompiling won't
+# crash existing users of the engine.
+hpsgui:	$(OBJS) $(GUIOBJS) $(UPLGDUMMY) chpsds
+	-@rm -f $@
+	$(CC) $(COPTS) -o $@ $(OBJS) $(GUIOBJS) $(UPLGDUMMY) $(LIBRARIES)
+	-@echo 'chmod g+w *.o *.s *.h makefile generate tmakeQ $@'; chmod g+w *.o *.s *.h makefile generate tmakeQ $@ >/dev/null 2>&1
+
+hps:	$(OBJS) $(UPDUMMY) chpsds
+	-@rm -f $@
+	$(CC) $(COPTS) -o $@ $(OBJS) $(UPDUMMY) $(NOGUILIBRARIES)
+	-@echo 'chmod g+w *.o *.s *.h makefile generate tmakeQ $@'; chmod g+w *.o *.s *.h makefile generate tmakeQ $@ >/dev/null 2>&1
+
+hpsgui.$(SHOBJ): $(GUIOBJS)
+	$(LD) $(LDGUILIBFLAGS) $(GUIOBJS) -o $@ $(GUILIBRARIES)
+
+# this is the release engine; it is stripped
+# Note that any existing engine is unlinked (removed) so that recompiling won't
+# crash existing users of the engine.
+oe:	hps
+	-@rm -f $@
+	cp hps $@
+	strip $@
+	-@echo 'chmod g+w $@'; chmod g+w $@ >/dev/null 2>&1
+
+oegui:	hpsgui
+	-@rm -f $@
+	cp hpsgui $@
+	strip $@
+	-@echo 'chmod g+w $@'; chmod g+w $@ >/dev/null 2>&1
+
+# the user-primitive linkable file, must be built separately
+hpsgui.$(OBJ):	$(OBJS) $(GUIOBJS)	$(UPRIMS) chpsods
+	$(LD) $(LDFLAGS) -o $@ $(OBJS) $(GUIOBJS) $(UPRIMS)
+
+hps.$(OBJ):	$(OBJS)	$(UPRIMS) chpsods
+	$(LD) $(LDFLAGS) -o $@ $(OBJS) $(UPRIMS)
+
+# this is a short-cut to just the link phase
+# it is up to you compile changed sub-systems
+link:
+#	-@[ -f hps ] && eval "echo mv hps hpsold; rm -f hpsold; mv hps hpsold"
+	$(CC) $(COPTS) -o hpsgui $(OBJS) $(GUIOBJS) $(UPLGDUMMY) $(LIBRARIES)
+	-@echo 'chmod g+w *.o *.s *.h makefile generate tmakeQ hps oe'; chmod g+w *.o *.s *.h makefile generate tmakeQ hps oe >/dev/null 2>&1
+
+# this is a short-cut to the user-primitive linkable file.
+# it is up to you compile changed sub-systems
+linko:
+	$(LD) $(LDFLAGS) -o hpsgui.$(OBJ) $(OBJS) $(GUIOBJS) $(UPRIMS)
+
+# these check the date stamps of hps and hps.o (in prUdummy.o & prUsrSupport.o)
+#
+# N.B. date '+%h %d 19%y' is the correct date on SunOS.  Every other unix
+# platform we run on uses date '+%b %e %Y'.  So for now SunOS always whinges.
+
+checkDateStamp:	chpsds chpsods
+
+chpsds:
+	-@test -z "`strings - $(UPDUMMY) | fgrep \"\`date '+%b %e %Y'\`\"`" && echo Date stamp in $(UPDUMMY) may be old.  You should probably recompile $(UPRIMS) and $(UPLGDUMMY)
+
+chpsods:
+	-@test -z "`strings - $(UPRIMS) | fgrep \"\`date '+%b %e %Y'\`\"`" && echo Date stamp in $(UPRIMS) may be old.  You should probably recompile $(UPRIMS)
+
+# these will remove all the .o files, make dependencies and re-compile all
+fresh: clean newdeps hpsgui
+freshgui: clean newdeps hps hpsgui.$(SHOBJ)
+
+# this creates the include dependency files
+# run this before making dependencies
+init:
+	$(INITIALIZE)
+	for name in $(ALLSUBSYS) ; do touch $${name}.dep ; done; \
+	sleep 2;
+	-touch makefile
+
+# this builds all the dependency files that are out of date
+deps: stack.dep $& tran.dep $& platgui.dep $& plat.dep $& extgui.dep $& ext.dep $& prim.dep $& mman.dep $& zlib.dep
+
+# this will force the rebuilding of the dependency files
+newdeps: deps.stack $& deps.tran $& deps.platgui $& deps.plat $& deps.ext $& deps.extgui $&  deps.prim $& deps.mman $& deps.zlib
+
+# this is obvious
+clean:
+	rm -f *.o glue.[is] structOffsets.h mcacheQ.h nmethodQ.h otQ.h generate tmakeQ glue.s hps hps.o oe oe.o hpsgui hpsgui.o oegui oegui.o
+
+cleano:
+	rm -f *.o
+
+# this removes everything but the make file and the source file link
+cleanall:
+	mv makefile $(HPSSDIR) ..
+	rm -f *
+	mv ../makefile ../$(HPSSDIR) .
+
+# this created a new full release from scratch
+release: cleanall init deps copy
+
+# create the engine and user primitive linkable and copy
+copy: hps linko
+	cp hps oe
+	mv hps.o oe.o
+
+# install the saved copies to the RELEASE directory
+# RELEASE must be the path to the release directory environment variable
+install:
+	@NAME=${NAME}; [ -z "$$NAME" ] && NAME=${PLATFORM}; \
+	[ -z "$$RELEASE" ] && eval "echo RELEASE path not set; exit 3"; \
+	set -x; cp oe    $$RELEASE/$$NAME; \
+	cp oe.o  $$RELEASE/$$NAME.o
+
+# the image munger
+imageMunge: $(HPSSDIR)/utilities/imageMunge.c
+	$(CC) $(CDEFS) -I$(HPSSDIR)/include -o $@ $?
+
+# the image compressor
+imageCompress: $(HPSSDIR)/utilities/imageCompress.c
+	$(CC) $(CDEFS) -I$(HPSSDIR)/include -I$(HPSSDIR)/mman -o $@ $? -lz
+
+# the scavenge-log analyser
+printScavengeData: $(HPSSDIR)/mman/printScavengeData.c $(HPSSDIR)/mman/scavRecord.h
+	$(CC) -o $@ $(HPSSDIR)/mman/$@.c -I$(HPSSDIR)/include -Dplatform=$(PLATFORM)
+
+# the rest of this file is the sub-system make handoff targets
+mman.$(OBJ): __@@__
+	@f=makefile.mman; [ -f $$f ] || f=$(MAKEDIR)/$$f; \
+	$(MAKE) -f $$f $(OPTIONS)
+
+prim.$(OBJ): __@@__
+	@f=makefile.prim; [ -f $$f ] || f=$(MAKEDIR)/$$f; \
+	$(MAKE) -f $$f $(OPTIONS) INLINE="$(PRIM_INLINE)"
+
+stack.$(OBJ): __@@__
+	@f=makefile.stack; [ -f $$f ] || f=$(MAKEDIR)/$$f; \
+	$(MAKE) -f $$f $(OPTIONS)
+
+ext.$(OBJ): __@@__
+	@f=makefile.ext; [ -f $$f ] || f=$(MAKEDIR)/$$f; \
+	$(MAKE) -f $$f $(OPTIONS)
+
+extgui.$(OBJ): __@@__
+	@f=makefile.extgui; [ -f $$f ] || f=$(MAKEDIR)/$$f; \
+	$(MAKE) -f $$f $(GUILIBOPTIONS)
+
+platgui.$(OBJ): __@@__
+	@f=makefile.gui$(GUI); [ -f $$f ] || f=$(MAKEDIR)/$$f; \
+	$(MAKE) -f $$f $(GUILIBOPTIONS)
+
+plat.$(OBJ): __@@__
+	@f=makefile.$(PLATFORM); [ -f $$f ] || f=$(MAKEDIR)/$$f; \
+	$(MAKE) -f $$f $(OPTIONS)
+
+zlib.$(OBJ): __@@__
+	@f=makefile.zlib; [ -f $$f ] || f=$(MAKEDIR)/$$f; \
+	$(MAKE) -f $$f $(OPTIONS)
+
+# Note that here (and below for the dependencies) we have to include
+# one special define for the translator: "TARGET" for the target
+# processor of the translator (as it is retargetable).
+tran.$(OBJ): __@@__
+	@f=makefile.tran; [ -f $$f ] || f=$(MAKEDIR)/$$f; \
+	$(MAKE) -f $$f $(OPTIONS) TARGET=$(PROCESSOR)
+
+# The rules to build all the platform dependency lists for each subsystem.
+# By touching the makefile all new dependencies will be made.
+
+stack.dep: $(MAKEDIR)/makefile.stack makefile
+	@f=makefile.stack; [ -f $$f ] || f=$(MAKEDIR)/$$f; \
+	$(MAKE) -f $$f $@ $(OPTIONS)
+
+deps.stack: __@@__
+	@f=makefile.stack; [ -f $$f ] || f=$(MAKEDIR)/$$f; \
+	$(MAKE) -f $$f stack.dep $(OPTIONS) F=__@@__
+
+prim.dep: $(MAKEDIR)/makefile.prim makefile
+	@f=makefile.prim; [ -f $$f ] || f=$(MAKEDIR)/$$f; \
+	$(MAKE) -f $$f $@ $(OPTIONS)
+
+deps.prim: __@@__
+	@f=makefile.prim; [ -f $$f ] || f=$(MAKEDIR)/$$f; \
+	$(MAKE) -f $$f prim.dep $(OPTIONS) F=__@@__
+
+ext.dep: $(MAKEDIR)/makefile.ext makefile
+	@f=makefile.ext; [ -f $$f ] || f=$(MAKEDIR)/$$f; \
+	$(MAKE) -f $$f $@ $(OPTIONS)
+
+deps.ext: __@@__
+	@f=makefile.ext; [ -f $$f ] || f=$(MAKEDIR)/$$f; \
+	$(MAKE) -f $$f ext.dep $(OPTIONS) F=__@@__
+
+plat.dep: $(MAKEDIR)/makefile.$(PLATFORM) makefile
+	@f=makefile.$(PLATFORM); [ -f $$f ] || f=$(MAKEDIR)/$$f; \
+	$(MAKE) -f $$f $@ $(OPTIONS)
+
+deps.plat: __@@__
+	@f=makefile.$(PLATFORM); [ -f $$f ] || f=$(MAKEDIR)/$$f; \
+	$(MAKE) -f $$f plat.dep $(OPTIONS) F=__@@__
+
+extgui.dep: $(MAKEDIR)/makefile.extgui makefile
+	@f=makefile.extgui; [ -f $$f ] || f=$(MAKEDIR)/$$f; \
+	$(MAKE) -f $$f $@ $(GUILIBOPTIONS)
+
+deps.extgui: __@@__
+	@f=makefile.extgui; [ -f $$f ] || f=$(MAKEDIR)/$$f; \
+	$(MAKE) -f $$f extgui.dep $(GUILIBOPTIONS) F=__@@__
+
+platgui.dep: $(MAKEDIR)/makefile.gui$(GUI) makefile
+	@f=makefile.gui$(GUI); [ -f $$f ] || f=$(MAKEDIR)/$$f; \
+	$(MAKE) -f $$f $@ $(GUILIBOPTIONS)
+
+deps.platgui: __@@__
+	@f=makefile.gui$(GUI); [ -f $$f ] || f=$(MAKEDIR)/$$f; \
+	$(MAKE) -f $$f platgui.dep $(GUILIBOPTIONS) F=__@@__
+
+mman.dep: $(MAKEDIR)/makefile.mman makefile
+	@f=makefile.mman; [ -f $$f ] || f=$(MAKEDIR)/$$f; \
+	$(MAKE) -f $$f $@ $(OPTIONS)
+
+deps.mman: __@@__
+	@f=makefile.mman; [ -f $$f ] || f=$(MAKEDIR)/$$f; \
+	$(MAKE) -f $$f mman.dep $(OPTIONS) F=__@@__
+
+tran.dep: $(MAKEDIR)/makefile.tran makefile
+	@f=makefile.tran; [ -f $$f ] || f=$(MAKEDIR)/$$f; \
+	$(MAKE) -f $$f $@ $(OPTIONS) TARGET=$(PROCESSOR)
+
+deps.tran: __@@__
+	@f=makefile.tran; [ -f $$f ] || f=$(MAKEDIR)/$$f; \
+	$(MAKE) -f $$f tran.dep $(OPTIONS) TARGET=$(PROCESSOR) F=__@@__
+
+zlib.dep: $(MAKEDIR)/makefile.zlib makefile
+	@f=makefile.zlib; [ -f $$f ] || f=$(MAKEDIR)/$$f; \
+	$(MAKE) -f $$f $@ $(OPTIONS)
+
+deps.zlib: __@@__
+	@f=makefile.zlib; [ -f $$f ] || f=$(MAKEDIR)/$$f; \
+	$(MAKE) -f $$f zlib.dep $(OPTIONS) F=__@@__
+
+makefile: $(MAKEDIR)/makefile.generic $(MAKEDIR)/makefile.include
+	-touch makefile
+
+# blank target to force make execution of other targets
+__@@__:
+

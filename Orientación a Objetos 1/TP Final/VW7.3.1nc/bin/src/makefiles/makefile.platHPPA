@@ -1,0 +1,80 @@
+# * SccsId is  @(#)makefile.platHPPA	58.10 04/06/05
+# ************************************************************************
+# * File: makefile.platHPPA
+# *
+# * Subsystem makefile for HPS HP9000/700-800 platform
+# *
+# *	Copyright (C) 1999 Cincom Systems, Inc.
+# *	Santa Clara, California.  All Rights Reserved.
+# *
+# *	UNPUBLISHED, CONFIDENTIAL AND PROPRIETARY.
+# ************************************************************************
+#
+SUBSYS= plat
+SUBSYSDIR= $(HPSSDIR)/plat
+
+OBJS=\
+hppaIcache.$(OBJ) \
+hppaIflush.$(OBJ) \
+hppaCallC.$(OBJ) \
+hppaCallGlue.$(OBJ) \
+hppaCallback.$(OBJ) \
+hppaDynamicLoad.$(OBJ) \
+nilLeave.$(OBJ) \
+svr4MapFile.$(OBJ) \
+nilPlat.$(OBJ) \
+unxAlarm.$(OBJ) \
+unxDir.$(OBJ) \
+unxECode.$(OBJ) \
+unxError.$(OBJ) \
+unxHerald.$(OBJ) \
+unxIpc.$(OBJ) \
+unxLoadGUI.$(OBJ) \
+unxMain.$(OBJ) \
+unxMem.$(OBJ) \
+unxProc.$(OBJ) \
+unxSock.$(OBJ) \
+unxUtil.$(OBJ) \
+usvFile.$(OBJ) \
+usvMisc.$(OBJ) \
+usvSerial.$(OBJ) \
+usvSig.$(OBJ) \
+usvTime.$(OBJ)
+
+CSRCS=\
+hppaIcache.c \
+hppaCallC.c \
+hppaCallback.c \
+hppaDynamicLoad.c \
+nilLeave.c \
+svr4MapFile.c \
+nilPlat.c \
+unxAlarm.c \
+unxDir.c \
+unxECode.c \
+unxError.c \
+unxHerald.c \
+unxIpc.c \
+unxLoadGUI.c \
+unxMain.c \
+unxMem.c \
+unxProc.c \
+unxSock.c \
+unxUtil.c \
+usvFile.c \
+usvMisc.c \
+usvSerial.c \
+usvSig.c \
+usvTime.c
+
+
+SSRCS = hppaIflush.s hppaCallGlue.s
+
+### Subsystem target.
+
+$(SUBSYS).$(OBJ): $(OBJS)
+	$(LD) $(LDFLAGS) -o $@ $(OBJS)
+
+include src/makefiles/makefile.include
+
+include plat.dep

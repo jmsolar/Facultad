@@ -1,0 +1,58 @@
+# * SccsId is @(#)makefile.guiMacX	58.10 04/06/05
+# ************************************************************************
+# * File: makefile.guiMacX
+# *
+# * Subsystem makefile for HPS Apple OS X GUI.
+# *
+# *	Copyright (C) 2002 Cincom Systems, Inc.
+# *	Santa Clara, California.  All Rights Reserved.
+# *	Georg Heeg Objektorientierte Systeme
+# *	Dortmund, Germany.  All Rights Reserved.
+# *
+# *	UNPUBLISHED, CONFIDENTIAL AND PROPRIETARY.
+# ************************************************************************
+#
+
+SUBSYS=platgui
+SUBSYSDIR=$(HPSSDIR)/plat
+
+OBJS= \
+macXGQueue.$(OBJ) \
+macXAnim.$(OBJ) \
+macXCanvas.$(OBJ) \
+macXCursor.$(OBJ) \
+macXEvent.$(OBJ) \
+macXFont.$(OBJ) \
+macXGraphics.$(OBJ) \
+macXImage.$(OBJ) \
+macXLoadGUI.$(OBJ) \
+$(SPLASH_OBJ) \
+macXSelection.$(OBJ) \
+macXScreen.$(OBJ)
+
+
+CSRCS=\
+macXGQueue.c \
+macXLoadGUI.c
+
+OBJCSRCS= \
+macXAnim.m \
+macXCanvas.m \
+macXCursor.m \
+macXEvent.m \
+macXFont.m \
+macXGraphics.m \
+macXImage.m \
+macXScreen.m \
+macXSelection.m
+
+SSRCS = macXcallCglue.s
+
+### Subsystem target.
+
+$(SUBSYS).$(OBJ): $(OBJS)
+	$(LD) $(LDFLAGS) -o $@ $(OBJS)
+
+include src/makefiles/makefile.include
+
+include platgui.dep

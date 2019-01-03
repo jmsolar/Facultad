@@ -1,0 +1,86 @@
+# * SccsId is @(#)makefile.platMacX	58.10 04/06/05
+# ************************************************************************
+# * File: makefile.platMacX
+# *
+# * Subsystem makefile for HPS Apple OS X platform, using PowerPC chip.
+# *
+# *	Copyright (C) 2002 Cincom Systems, Inc.
+# *	Santa Clara, California.  All Rights Reserved.
+# *	Georg Heeg Objektorientierte Systeme
+# *	Dortmund, Germany.  All Rights Reserved.
+# * 
+# *
+# *	UNPUBLISHED, CONFIDENTIAL AND PROPRIETARY.
+# ************************************************************************
+#
+#
+SUBSYS= plat
+SUBSYSDIR= $(HPSSDIR)/plat
+
+OBJS=\
+bsdFile.$(OBJ) \
+rs6000Icache.$(OBJ) \
+bsdMisc.$(OBJ) \
+macXMisc.$(OBJ) \
+nilSerial.$(OBJ) \
+bsdSig.$(OBJ) \
+bsdTime.$(OBJ) \
+ibmCallC.$(OBJ) \
+ibmCallback.$(OBJ) \
+macXcallCglue.$(OBJ) \
+dyldDynamicLoad.$(OBJ) \
+nilLeave.$(OBJ) \
+svr4MapFile.$(OBJ) \
+nilPlat.$(OBJ) \
+unxAlarm.$(OBJ) \
+unxDir.$(OBJ) \
+unxECode.$(OBJ) \
+unxError.$(OBJ) \
+unxHerald.$(OBJ) \
+unxIpc.$(OBJ) \
+macXMain.$(OBJ) \
+unxLoadGUI.$(OBJ) \
+unxMem.$(OBJ) \
+unxProc.$(OBJ) \
+unxSock.$(OBJ) \
+unxUtil.$(OBJ)
+
+CSRCS=\
+bsdFile.c \
+rs6000Icache.c \
+bsdMisc.c \
+nilSerial.c \
+bsdSig.c \
+bsdTime.c \
+ibmCallC.c \
+ibmCallback.c \
+nilLeave.c \
+svr4MapFile.c \
+nilPlat.c \
+unxAlarm.c \
+unxDir.c \
+unxECode.c \
+unxError.c \
+unxHerald.c \
+unxIpc.c \
+unxLoadGUI.c \
+unxMem.c \
+unxProc.c \
+unxSock.c \
+unxUtil.c
+
+OBJCSRCS= \
+dyldDynamicLoad.m \
+macXMain.m \
+macXMisc.m
+
+SSRCS = macXcallCglue.s
+
+### Subsystem target.
+
+$(SUBSYS).$(OBJ): $(OBJS)
+	$(LD) $(LDFLAGS) -o $@ $(OBJS)
+
+include src/makefiles/makefile.include
+
+include plat.dep

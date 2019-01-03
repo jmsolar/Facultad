@@ -1,0 +1,72 @@
+# SccsId is @(#)nt.fast.nb.arm.wince.makefile.vw7	58.10 04/06/05
+#==================
+#
+# Top-level makefile for HPS on WinCE ARMV4.  This makefile provides tailored
+# definitions that adapt the main makefile makefile.vw7 to make the various
+# engine executables, libraries and sundry support executables.
+
+# Required Definitions.  These can be defined in the environment, an outer
+# makefile or defined here. Edit to suit your installation.
+#
+# MSDEV, the location of the Visual C++ environment
+!IFNDEF MSDEV
+MSDEV=F:\Program Files\Microsoft Visual Studio\VC98
+!ENDIF
+
+# TMSDEV, the location of the Windows CE/PocketPC SDK
+!IFNDEF TMSDEV
+TMSDEV=F:\Program Files\Windows CE Tools\wce400\STANDARDSDK
+!ENDIF
+
+# SDKVERSION, the version of the SDK
+!IFNDEF SDKVERSION
+SDKVERSION=400
+!ENDIF
+
+# MSVC_VER, the version of the Visual C++ compiler; note that eMbedded Visual
+# C++ 4.0 is a version of VC++ 6 (at least CL.EXE has a v6 version number)
+!IFNDEF MSVC_VER
+MSVC_VER=6
+!ENDIF
+
+# PLATFORM, from include\platNames.h
+PLATFORM=platWinCEARM
+
+# HPSSRC, the location of the root of the source tree
+!IFNDEF HPSSRC
+HPSSRC=..\..\..\src
+!ENDIF
+#
+# the compilation flags for C files, C files that must be compiled with frame
+# pointers, and the check-map C files respectively.
+COPTS=/GF /Z7 /Ox /Oy- /Ow /Op /Oi -DmemcpyInlined
+NOOPTCOPTS=$(CFLAGS) -DmemcpyInlined
+CDBGOPT=/GF /Ox /Oy /Oa /Op
+
+# Optional Definitions
+#
+# BASEDEFS, basic definitions for engine compilation
+BASEDEFS=-DFIRENZE
+#
+# OPTDEFS, optional defines for engine compilation
+OPTDEFS=$(OPTDEFS)
+#	NBAPI, defines for the threaded C connect
+OPTDEFS=$(OPTDEFS) -DNBAPI -DNTTHREADS
+#	OE_PROFILE, defines for the engine profiler
+OPTDEFS=$(OPTDEFS) -DOE_PROFILE
+#	MEASURE, send measurements, INSTR, gc measurements, TIMING, scavenge timing
+OPTDEFS=$(OPTDEFS) #-DMEASURE -DINSTR=1 -DTIMING=1
+#
+# OPTLIBS, optional libraries for engine linking
+OPTLIBS=
+OPTDEFS=$(OPTDEFS) -DWINSOCK2 -DLINK_WINSOCK=1
+#
+# DEBUGDEFS, to compile a production engine
+DEBUGDEFS=
+
+
+# default target(s).  Delete those not required
+#
+all: engineexes enginelibs
+
+!include "$(HPSSRC)\makeplat\nt\makefile.vw7"

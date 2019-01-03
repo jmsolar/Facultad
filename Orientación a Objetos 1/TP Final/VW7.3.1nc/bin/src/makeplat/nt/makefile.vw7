@@ -1,0 +1,1174 @@
+# SccsId is @(#)nt.makefile.vw7	58.10 04/06/05
+#==================
+# makefile.vw7: Core makefile for the VisualWorks 7 OE on Windows NT/2k/XP/95/98/ME/CE
+# for IA32, ARMV4 and maybe Alpha AXP and MIPS.  Use various {fast,assert,norm}*makefile.vw7
+# makefiles as top-level makefiles that include this core makefile.
+#
+#	Known problems:
+#		Under MSVC 7 .Net no debug info produced for fast\vwntoe.dll.
+#   Revised:
+#	25 Nov 2004 eem: Make makefile build using MSVC 7 .NET
+#	30 Apr 2004 eem,rp: Make makefile cross-compile for WinCE
+#	 9 Apr 2003 eem: Moved PLATFORM to outer makefiles
+#	13 Dec 2001 eem: Eliminated DEBUG flag
+#	30 Sep 2001 eem: Modified to be included by fast.nb.makefile.vw50 et al
+#	7  Mar 2000 eem: Coallesced various link options, added oeconsole
+#	19 Feb 2000 eem: Used linkfile, discarding various foo.lin files
+#	6  Oct 1999 eem: Used standard win32.mak from DevStudio\vc\include
+#	13 Apr 1999 eem: Added MEASURE engine
+#   16 Feb 1999 eem: Removed vwntprnt nonsense.
+#   7  Aug 1998 eem: Added computing of dependencies
+#   12 Apr 1997 eem: Added engine dll (vwntdll et al)
+#   4  Apr 1997 eem: Added vwntprnt.dll for /DCONSOLE
+#   19 Dec 1996 eem: Added OE_PROFILE stuff
+#   8  Nov 1996 eem: Added msvc version
+#   5  Sep 1996 aw,eem: Changed thread-safety flags, libraries & link filename.
+#   6  Aug 1996 eem: Merged x86 & AXP into single makefile.
+#   20 May 1996 eem: NBAPI/FIXED SPACE Post-EFT makefile.
+#                    merged in DIGITAL Makefile changes.
+#   17 May 1994 rjc  Changed to use the Unix sources
+#                    plus miscellaneous general clean up.
+#   19 Sep 1994 ehl  Changed to link in ntnls.obj,
+#                     plus miscellaneous other changes for I18N compilation.
+#   21 Jul 1994 ehl Many cleanups, including revisions to build NT1632.dll
+#                   without requiring msvcrt10.dll.
+#   15 Jul 1994 ehl for i18n setup
+#                       ... mostly adjusting paths; added $(UT) for UT dir
+#   24 Apr 1994 sc for Visual C++ 1.0,
+#               ... this required changing the include path to "include"
+#               from "h", and extracting the code that used to convert the
+#               "res" file into a "obj" file.
+#   8  Mar 1994 sc
+#   11 Feb 1993 by Craig.
+#
+#   Notation conventions:
+#       "comment"
+#       <variable>
+#       [optional]
+#       {choice1 choice2 ...}
+#
+#   Please see the following references as well:
+#       C environment component manuals (for compiler, linker, librarian flags, etc.)
+#       'nmake' documentation (for directive syntax).
+#
+#   These must be set in the outer makefile (fast.nb.makefile.vw7 et al)
+#       PLATFORM = suitable platform name from platNames.h
+#       HPSSRC   = <path to root of the source tree>
+#		MSDEV    = <path to root of Visual Studio tree>
+#		MSVC_VER = version of MSVC++ in use
+#
+#   These settings are made in a top-level makefile derived from one of the
+#	example fast.nb.makefile.vw7, norm.nb.makefile.vw7 et al.
+#
+#	Optionally if doing a cross-compile (i.e. Windows CE builds) the outer makefile
+#	can define T defines, which start with a T (for T)
+#		TMSDEV	= <path to root of Windows CE Tools tree>
+#
+#   General comments:
+#   There are things other than object files in
+#       ./fast,norm,assert.
+#
+
+# Clean-up TODOs after Windows CE putsch
+# INFLAGS->INCLUDE
+
+# This version NO LONGER SUPPORTS Windows 3.1 (Yippee!!!)
+
+!IFNDEF TMSDEV
+TMSDEV=$(MSDEV)
+!ENDIF
+
+# Source and target paths
+# Standard source location, usually <NFS mountpoint>:
+#
+# HPSSRC is set in top-level makefile
+#
+!IFNDEF HPS_MAKE
+HPS_MAKE=$(HPSSRC)\makeplat\nt
+!ENDIF
+
+#
+# Include and lib paths
+#
+
+!IF $(MSVC_VER) >= 7
+INFLAGS=/I"$(HPSSRC)\include" /I"$(MSDEV)\include" /I"$(MSDEV)\PlatformSDK\include"
+LIB=.;"$(MSDEV)\lib";"$(MSDEV)\PlatformSDK\lib"
+!ELSE
+INFLAGS=/I"$(HPSSRC)\include" /I"$(MSDEV)\include"
+LIB=.;"$(MSDEV)\lib"
+!ENDIF
+
+# Set up MSVC vars for the platform we're compiling for.
+# CPU, MACHINE, PROCESSOR & base CDEFS
+
+CCDEFS= /Dplatform=$(PLATFORM)
+
+!IF "$(PLATFORM)" == "platNTPentium" \
+ || "$(PLATFORM)" == "platWin32Pentium" \
+ || "$(PLATFORM)" == "platNT486" \
+ || "$(PLATFORM)" == "platNT386"
+CPU=i386
+MACHINE=IX86
+SUBSYSTEM=windows
+OEDLLBASE=/BASE:0x410000
+GLUEFILE=glueNT86.obj
+! IF "$(PLATFORM)" == "platNT386"
+PROCESSOR=procI386
+! ELSEIF "$(PLATFORM)" == "platNT486"
+PROCESSOR=procI486
+! ELSE
+PROCESSOR=procPentium
+! ENDIF
+! IF $(MSVC_VER) >= 5 # Newer MSVCs support "blended" code gen machine model
+CCDEFS= $(CCDEFS) /GB
+! ELSE
+CCDEFS= $(CCDEFS) /G5
+! ENDIF
+
+!ELSEIF "$(PLATFORM)" == "platANT"
+CPU=ALPHA
+MACHINE=ALPHA_AXP
+SUBSYSTEM=windows
+GLUEFILE=glueAXP.obj
+PROCESSOR=procAXP
+! IF "$(VERSION)" == "3.5"
+OPTDEFS= $(OPTDEFS) /DDAYTONA_BUG
+! ENDIF
+CCDEFS= $(CCDEFS) /QAieee /QApdie
+
+!ELSEIF "$(PLATFORM)" == "platNTMIPS" # Untested!
+CPU=MIPS
+MACHINE=MIPS
+SUBSYSTEM=windows
+GLUEFILE=glueMIPS.obj
+PROCESSOR=procMIPS
+
+!ELSEIF "$(PLATFORM)" == "platNTPPC" # Untested!
+CPU=PPC
+MACHINE=PPC
+SUBSYSTEM=windows
+GLUEFILE=gluePPC.obj
+PROCESSOR=procRS60x # perhaps procPPCSysVABI?
+
+!ELSEIF "$(PLATFORM)" == "platWinCEARM"
+CPU=ARMV4
+MACHINE=IX86
+TMACHINE=ARM
+SUBSYSTEM=windowsce
+APPVER=4.0
+TARGETOS=WINCE
+GLUEFILE=glueWinARM.obj
+PROCESSOR=procARM
+TCOMPILER=clarm
+TINFLAGS=/I"$(HPSSRC)\include" /I"$(HPSSRC)\makeplat\ce" /I"$(TMSDEV)\Include\Armv4" /I"$(TMSDEV)\Atl\Include"
+TLIB="$(TMSDEV)\Lib\Armv4"
+HCFLAGS=-Dx86=1
+ARCHFLAGS=-D_M_ARM=1 -DARM=1
+# TCFLAGS=/WX This is useful for development
+TLINKFLAGS=/NODEFAULTLIB
+ASSEMBLER=ARMASM
+EDITGLUE=editglue_cearm
+OEDLLEXPORTS=vwarmexports.def
+
+!ELSEIF "$(PLATFORM)" == "platWinCEPentium"
+CPU=i386
+MACHINE=IX86
+SUBSYSTEM=windowsce
+APPVER=4.0
+TARGETOS=WINCE
+GLUEFILE=
+SELFMADELIBS=glueNT86.lib
+PROCESSOR=procPentium
+TINFLAGS=/I"$(HPSSRC)\include" /I"$(HPSSRC)\makeplat\ce" /I"$(TMSDEV)\Include\X86" /I"$(TMSDEV)\Atl\Include"
+TLIB="$(TMSDEV)\Lib\X86"
+HCFLAGS=-Dx86=1
+ARCHFLAGS=-Dx86=1 -D_X86_=1
+TCFLAGS=/WX # This is useful for development
+TLINKFLAGS=/NODEFAULTLIB
+
+!ELSEIF "$(PLATFORM)" == "platWinCEEmulator"
+CPU=i386
+MACHINE=IX86
+SUBSYSTEM=windowsce
+APPVER=4.0
+TARGETOS=WINCE
+GLUEFILE=
+SELFMADELIBS=glueNT86.lib
+PROCESSOR=procPentium
+TINFLAGS=/I"$(HPSSRC)\include" /I"$(HPSSRC)\makeplat\ce" /I"$(TMSDEV)\Include\Emulator" /I"$(TMSDEV)\Atl\Include"
+TLIB="$(TMSDEV)\Lib\Emulator"
+HCFLAGS=-Dx86=1
+ARCHFLAGS=-Dx86=1 -D_X86_=1
+TCFLAGS=/WX # This is useful for development
+TLINKFLAGS=/NODEFAULTLIB
+
+!ELSE
+!ERROR "No suitable platform defined"
+!ENDIF
+
+!IFNDEF TARGETOS
+TARGETOS=BOTH
+!ENDIF
+
+!IF "$(TARGETOS)" == "WINCE"
+! IFNDEF SDKVERSION
+!	ERROR You need to define SDKVERSION as e.g. 400 410 420 etc
+! ENDIF
+# These flags have been inferred from the SDK includes
+cflags= $(cflags) -DUNDER_CE=1 -DUNICODE=1 -DUNICODE_ONLY=1 -D_WIN32_WCE -DSDKVERSION=$(SDKVERSION)
+!ELSE
+# Use the official win32.mak from DevStudio\vc\include
+!include <win32.mak>
+
+ # Because of a bug with win32.mak (it forgets to set _WIN32_WINNT=0x0400 if
+ # the OS type is BOTH), we do so manually here.  We also define
+ # WIN32_LEAN_AND_MEAN to prevent windows.h from pulling in winsock2.h
+ #
+cflags=$(cflags) -D_WIN32_WINNT=0x0400 -DWIN32_LEAN_AND_MEAN
+!ENDIF
+
+!IF $(MSVC_VER) <= 4
+TLINKFLAGS=/ALIGN:0x1000 $(TLINKFLAGS)
+!ENDIF
+
+!IFDEF APPVER
+SSAV=,$(APPVER)
+!ELSE
+SSAV=
+!ENDIF
+
+# Setup target lib.  This is simply MSDEV\LIB on native compiles
+# but is target-specific on Windows CE cross-compiles.
+
+!IFNDEF TLIB
+TLIB=$(LIB)
+!ENDIF
+
+!IFNDEF OEDLLEXPORTS
+OEDLLEXPORTS=vwntexports.def
+!ENDIF
+
+#
+# Variables
+#
+
+# Flags and flag variables
+
+#
+# The compiler options used (or temporarily used) are:
+#
+# c:    compile without linking
+# C:    preserve comments in preprocessor output
+# E:    copy preprocessor output to standard out
+
+# Od:   Disable optimizations
+# Ox:   Use maximum optimization
+# Oy-:  Force stack frames. N.B. Without this VC++ V5 builds a buggy engine.
+#		e.g. menu bar menus that disappear when slowly moving the mouse.
+# Op:	Improve fp consistency (don't use 80-bit regs; don't inline fp arith)
+#       This *must* be used on x86 Windows with certain version of VC++
+#       (e.g. V5) because without it the compiler generates code for ln
+#       that does not generate NaNs for 0 or negative values.  This happens
+#       because the x86 floating-point unit does not generate NaN results for
+#       out-of-range arguments for a number of floating-point instructions
+#       including ln sqrt sin and cos.
+# Oi:	Inline certain intrinsic functions; e.g. memcpy, strcpy, strlen.
+# Oa:	Assume no aliasing occurs at all (used in mmCheckMap.c).
+# Ow:	Assume no aliasing occurs within function bodies but might occur
+#		across function calls. After each function call, pointer variables
+#		must be reloaded from memory.
+
+
+# GF:   Pool strings (string literals?) in read-only memory
+# Gf:   Pool strings (string literals?) in writable memory
+
+# Za:   only allow ANSI constructs
+# Zi:   generate debugging information using a .pdb program database file
+# Z7:	generate debugging information in object and exe files
+# ZpN:	pack structures to given alignment
+#
+# The MASM386 assembler options used (or temporarily used) are:
+#
+# ML:   treat names as case-sensitive
+# Zi:   generate debugging information
+# W2:   use warning level 2
+#
+# The ML assembler options used (or temporarily used; see:
+# 	http://msdn.microsoft.com/library/default.asp?url=
+#			/library/en-us/vcmasm/html/vcoriMicrosoftAssemblerMacroLanguage.asp
+# ) are:
+# c:	assemble without linking
+# Cp:	preserve case of user identifiers
+# Cx:	preserve case in publics, externs
+# coff	generate a coff format obj file
+# W2	use warning level 2
+# Zd:	Add line number debug info
+# Zi:   generate debugging information
+#
+#       Note that versions 2.0 & 2.2 of VC++ don't support MTd or MDd.
+#
+# MT:   Use a multi-threaded statically-linked libc
+# MTd:  Use debug version of a multi-threaded statically-linked libc
+#
+# MD:   Use a multi-threaded dynamically-linked libc (e.g. msvcrt.dll)
+# MDd:  Use debug version of multi-threaded libc DLL (e.g. msvcrtd.dll)
+#
+#
+# QI0f:   generate code that is immune to the Pentium error
+# QIfdiv: option offers a workaround for the Intel Pentium
+#         microprocessors with flawed FDIV, FPREM, FPTAN,
+#         and FPATAN instructions
+#         QI0f, QIfdiv were unavailable in MSVC 2.x
+#
+
+CCDEFS= $(CCDEFS) $(BASEDEFS) $(OPTDEFS) $(DEBUGDEFS) -DMSVC_VER=$(MSVC_VER)
+RESDEFS=$(BASEDEFS) $(OPTDEFS) $(DEBUGDEFS) -DMSVC_VER=$(MSVC_VER)
+CCOPTS= $(cflags) $(cvarsdll) -nologo -DANSI
+CCOPTS=         $(CCOPTS) $(COPTS)
+CCNOOPTOPTS=    $(CCOPTS) $(NOOPTCOPTS)
+CCCHECKMAPOPTS= $(CCOPTS) $(CDBGOPT)
+
+# Compile and link
+!IFNDEF TINFLAGS
+TINFLAGS=$(INFLAGS)
+!ENDIF
+RESFLAGS=    $(TINFLAGS) $(RESDEFS) $(ARCHFLAGS) 
+CFLAGS=      $(INFLAGS)  $(CCDEFS)  $(CCOPTS) $(HCFLAGS)
+TCFLAGS=	 $(TINFLAGS) $(CCDEFS)  $(CCOPTS) $(ARCHFLAGS) $(TCFLAGS)
+CNOOPTFLAGS= $(TINFLAGS) $(CCDEFS)  $(CCNOOPTOPTS) $(ARCHFLAGS)
+CDBGOPTFLAGS=$(TINFLAGS) $(CCDEFS)  $(CCCHECKMAPOPTS) $(ARCHFLAGS)
+
+#
+# Libraries
+
+CONSOLELIBS=$(conflags) $(conlibsdll)
+SELFMADELIBS=zlib.lib $(SELFMADELIBS)
+OPTLIBS=$(OPTLIBS) $(SELFMADELIBS)
+LIBS= msvcrt.lib oldnames.lib $(winlibs) advapi32.lib lz32.lib winmm.lib mpr.lib shell32.lib
+!IF "$(TARGETOS)" == "WINCE"
+TLIBS=corelibc.lib coredll.lib mmtimer.lib ntcompat.lib ws2.lib
+STUBEXE_TLIBS=corelibc.lib coredll.lib
+!ELSE
+TLIBS=$(LIBS)
+!ENDIF
+OEEXE_LIBS=$(TLIBS) $(OPTLIBS)
+OEDLL_LIBS=$(TLIBS) $(OPTLIBS)
+
+
+ERRFILE=    errors.txt
+ERRLOG=     >>$(ERRFILE)
+OLDERRFILE= olderrors.txt
+LERRFILE=   lerrors.txt
+LERRLOG=    >>$(LERRFILE)
+
+# This is for USERPRIM and DLLCC
+#
+# Uncomment the next line if want to live dangerously.
+# Note that you will need to remove prUdummy.obj first.
+#
+# SAFETY= /DUNSAFE
+
+# Compilation machinery
+!IFNDEF COMPILER
+COMPILER=       cl
+!ENDIF
+!IFNDEF TCOMPILER
+TCOMPILER=$(COMPILER)
+!ENDIF
+!IFNDEF TMACHINE
+TMACHINE=$(MACHINE)
+!ENDIF
+!IFNDEF ASSEMBLER
+! IF "$(CPU)" == "i386"
+!  IF $(MSVC_VER) >= 7
+ASSEMBLER=	ml
+MASM=		ml
+!  ELSE
+ASSEMBLER=	$(HPS_MAKE)\masm386
+MASM=		$(HPS_MAKE)\ml
+!  ENDIF
+THUNKER=	$(HPS_MAKE)\thunk
+! ELSEIF "$(CPU)" == "ALPHA"
+ASSEMBLER=      asaxp
+! ENDIF
+!ENDIF
+!IFNDEF EDITGLUE
+EDITGLUE=editglue
+!ENDIF
+!IFNDEF LINKER
+LINKER=         link
+!ENDIF
+!IFNDEF LIBRARIAN
+LIBRARIAN=      lib
+!ENDIF
+!IFNDEF RC
+RC=             rc
+!ENDIF
+
+# Subsystem source locations and compilation flags
+ARTSRC=$(HPSSRC)\makeplat\artwork
+MAKESRC=$(HPSSRC)\makeplat\nt
+ZLIBSRC=$(HPSSRC)\zlib
+
+STACKSRC=$(HPSSRC)\stack
+STACKFLAGS=$(TCFLAGS)
+
+PLATSRC=$(HPSSRC)\platpc
+PLATFLAGS=$(TCFLAGS) $(OPTPLATFLAGS) /I$(PLATSRC) /I$(ARTSRC)
+PLATRESFLAGS=$(RESFLAGS) $(OPTPLATFLAGS) /I$(PLATSRC) /I$(ARTSRC) /I.
+
+EXTSRC=$(HPSSRC)\ext
+EXTFLAGS=$(TCFLAGS) $(OPTEXTFLAGS) /I$(EXTSRC) /I$(ZLIBSRC)
+
+MMANSRC=$(HPSSRC)\mman
+MMANFLAGS=$(TCFLAGS) $(OPTMMANFLAGS) /I$(MMANSRC)
+MMANDBGOPTFLAGS=$(CDBGOPTFLAGS) $(OPTMMANFLAGS) /I$(MMANSRC)
+
+PRIMSRC=$(HPSSRC)\prim
+PRIMFLAGS=$(TCFLAGS) $(OPTPRIMFLAGS) /I$(PRIMSRC)
+
+TRANSRC=$(HPSSRC)\tran
+TRANFLAGS=$(TCFLAGS) $(OPTTRANFLAGS) /I$(TRANSRC) /I.
+
+USERSRC=$(HPSSRC)\userprim
+USERFLAGS=$(SAFETY) $(TCFLAGS)
+
+UTILSRC=$(HPSSRC)\utilities
+
+DLLCCSRC=$(HPSSRC)\dllcc30
+DLLCCFLAGS=$(SAFETY) /DANSI /Za
+
+#
+# Subsystem elements
+#
+
+STACKOBJSNOGLUE=\
+assertFail.obj \
+checks.obj \
+contexts.obj \
+dnu.obj \
+hist.obj \
+nlreturn.obj \
+nsupport.obj \
+primSends.obj \
+send.obj \
+services.obj \
+stackframe.obj \
+stackzone.obj \
+vmsupport.obj
+
+STACKOBJS=$(STACKOBJSNOGLUE) $(GLUEFILE)
+
+ENDOBJ=
+EPOBJS= ntstart.obj $(ENDOBJ)
+
+DLLEXEOBJS= ntexe.obj
+
+PLATOBJS= \
+ntalarm.obj \
+ntanim.obj \
+ntcanvas.obj \
+ntcurs.obj \
+ntdynld.obj \
+ntecode.obj \
+nterror.obj \
+ntevent.obj \
+ntfont.obj \
+ntgc.obj \
+ntgraph.obj \
+ntherald.obj \
+nthreg.obj \
+nticache.obj \
+ntimage.obj \
+ntioblok.obj \
+ntleave.obj \
+ntmain.obj \
+ntmem.obj \
+ntnls.obj \
+ntfile.obj \
+ntfio.obj \
+ntpipes.obj \
+ntsock.obj \
+ntplat.obj \
+ntprint.obj \
+ntsel.obj \
+ntsem.obj \
+ntsig.obj \
+nttime.obj \
+ntwin.obj
+
+!IF "$(CPU)" == "i386"
+PLATOBJS=$(PLATOBJS) \
+	ntcall16.obj \
+	ntcom.obj \
+	ntcallbk.obj \
+	ntcallc.obj \
+	ntcbk16.obj
+!ELSEIF "$(CPU)" == "ALPHA"
+PLATOBJS=$(PLATOBJS) \
+	antcbck.obj \
+	antcallc.obj
+!ELSEIF "$(CPU)" == "ARMV4"
+PLATOBJS=$(PLATOBJS) \
+	ntcom.obj \
+	armicache.obj \
+	armcallbk.obj \
+	armcallc.obj
+!ENDIF
+!IF "$(TARGETOS)" == "WINCE"
+PLATOBJS=$(PLATOBJS) \
+	wince_ntcompat.obj 
+!ENDIF
+
+PLATRES=ntoe.res
+
+EXTOBJS=\
+exBitBlt.obj \
+exCOM.obj \
+exCallC.obj \
+exCallback.obj \
+exCallSup.obj \
+exDisplay.obj \
+exEndian.obj \
+exEnviron.obj \
+exError.obj \
+exExport.obj \
+exInit.obj \
+exInQueue.obj \
+exIO.obj \
+exLeave.obj \
+exMemory.obj \
+exMessage.obj \
+exOption.obj \
+exPrimUtil.obj \
+exScanCh.obj \
+exSignal.obj \
+exTimer.obj \
+exThapi.obj
+
+MMANOBJS=\
+mm.obj \
+mmAllocate.obj \
+mmBecome.obj \
+mmCheckMap.obj \
+mmDebug.obj \
+mmEnumerate.obj \
+mmFinal.obj \
+mmGarbage.obj \
+mmIncGC.obj \
+mmInit.obj \
+mmLargeSpace.obj \
+mmFixedSpace.obj \
+mmNewSpace.obj \
+mmOldRt.obj \
+mmOopStack.obj \
+mmOldSpace.obj \
+mmProcess.obj \
+mmPermSpace.obj \
+mmResources.obj \
+mmRt.obj \
+mmScavenge.obj \
+mmSnapshot.obj \
+mmSubscript.obj \
+mmSysOop.obj
+
+PRIMOBJS=\
+pr.obj \
+prArithmetic.obj \
+prCtoST.obj \
+prDouble.obj \
+prFloat.obj \
+prLarge.obj \
+prLinkRegistry.obj
+
+TRANOBJS=\
+nmalloc.obj \
+nmcompact.obj \
+nmlookup.obj \
+taction.obj \
+taux.obj \
+tcgencode.obj \
+tcodes.obj \
+tinit.obj \
+tloop.obj \
+tloadstore.obj \
+tmain.obj \
+tmaprt.obj \
+tmaptran.obj \
+tnmprim.obj \
+tprim.obj \
+tregs.obj \
+tspecial.obj \
+tstack.obj \
+tsubr.obj \
+txarith.obj \
+txcontrol.obj \
+txmem.obj \
+txopt.obj \
+txprim.obj \
+txsubscript.obj \
+tpic.obj \
+taocount.obj \
+$(PROCESSOR)dis.obj
+
+USEROBJS=\
+	customize.obj \
+	validate.obj
+
+#
+# Targets ('[n]make' with no arguments invokes the first one). Note
+#       that NMAKE barfs on blank lines in target bodies.
+#
+# vwnt.exe:			stub .exe for windows sub-system engine
+# vwntconsole.exe:	stub .exe for console sub-system engine
+# vwntoe.dll:		dll containing main engine
+# vwntoeimport.lib:	import library for vwntoe.dll
+# vwnt.lib:			engine library for statically-linked user primitives
+
+DBGINFO=/DEBUG /PDB:NONE
+!IF "$(TARGETOS)" == "WINCE"
+DBGINFO=$(DBGINFO) /DEBUGTYPE:CV
+!ELSEIF $(MSVC_VER) <= 6
+DBGINFO=$(DBGINFO) /DEBUGTYPE:BOTH
+!ENDIF
+
+engineexes: vmexe vmconsoleexe vmsingleexe vmconsolesingleexe
+
+enginedll: vmdll
+
+enginelibs: vmlib
+
+supportexes: VisualWorks
+
+setup:
+	@echo ----------------------------------------
+	-if exist $(LERRFILE)   del  $(LERRFILE)
+	-if exist $(ERRFILE)    del  $(OLDERRFILE)
+	-if exist $(ERRFILE)    move $(ERRFILE) $(OLDERRFILE)
+	@echo ----------------------------------------
+
+VisualWorks: setup VisualWorks.exe
+VisualWorks.exe: $(PLATSRC)\nt$(@B).c $(PLATSRC)\ntvw.rc
+	$(RC) $(BASEDEFS) $(OPTDEFS) /I$(PLATSRC) /I$(ARTSRC) $(TINFLAGS) \
+		-fo ntvw.res -r $(PLATSRC)\ntvw.rc $(ERRLOG)
+	$(TCOMPILER) /c $(TCFLAGS) $(PLATSRC)\nt$(@B).c $(ERRLOG)
+	echo $@ $(LERRLOG)
+	$(LINKER) ntvw.res nt$(@B).obj msvcrt.lib $(winlibs) /MACHINE:$(TMACHINE) \
+		/OUT:$@ /LIBPATH:$(TLIB) $(TLINKFLAGS) $(DBGINFO) \
+		/subsystem:$(SUBSYSTEM)$(SSAV) $(LERRLOG)
+
+vmexe: setup vwnt.exe
+vwnt.exe: vwntoe.dll ntexe.obj res
+	echo $@ $(LERRLOG)
+	$(LINKER) /MACHINE:$(TMACHINE) ntoe.res ntexe.obj vwntoeimport.lib \
+		$(STUBEXE_TLIBS) /OUT:$@ /LIBPATH:$(TLIB) $(TLINKFLAGS) $(DBGINFO) \
+		/subsystem:$(SUBSYSTEM)$(SSAV) /MAP:$*.map $(LERRLOG)
+
+vmconsoleexe: setup vwntconsole.exe
+!IF "$(TARGETOS)" == "WINCE"
+vwntconsole.exe: vwntoe.dll ntexe.obj res
+	echo $@ $(LERRLOG)
+	$(LINKER) /MACHINE:$(TMACHINE) ntoe.res ntexe.obj vwntoeimport.lib \
+		$(STUBEXE_TLIBS) /OUT:$@ /LIBPATH:$(TLIB) $(TLINKFLAGS) $(DBGINFO) \
+		/subsystem:$(SUBSYSTEM)$(SSAV) /entry:wmain /MAP:$*.map $(LERRLOG)
+!ELSE
+vwntconsole.exe: vwntoe.dll ntexe.obj res
+	echo $@ $(LERRLOG)
+	$(LINKER) /MACHINE:$(TMACHINE) ntoe.res ntexe.obj vwntoeimport.lib \
+		$(STUBEXE_TLIBS) /OUT:$@ /LIBPATH:$(TLIB) $(TLINKFLAGS) $(DBGINFO) \
+		/subsystem:console$(SSAV) /MAP:$*.map $(LERRLOG)
+!ENDIF
+
+
+vmdll: setup vwntoe.dll
+vwntoe.dll: ntstart.obj prUdummy.obj stack plat ext mman prim tran res $(PLATSRC)\$(OEDLLEXPORTS) $(SELFMADELIBS)
+	$(LIBRARIAN) /DEF:$(PLATSRC)\$(OEDLLEXPORTS) /MACHINE:$(TMACHINE) \
+		/NAME:vwntoe ntstart.obj prUdummy.obj @linkfile \
+		/OUT:$(*)import.lib /LIBPATH:$(TLIB) $(LERRLOG)
+	echo $@ $(LERRLOG)
+	$(LINKER) /DLL /MACHINE:$(TMACHINE) \
+		$(*)import.exp ntoe.res ntstart.obj prUdummy.obj @linkfile $(ENDOBJ) \
+		/LIBPATH:$(TLIB) $(OEDLL_LIBS) /OUT:$@ /MAP:$*.map \
+		/subsystem:$(SUBSYSTEM)$(SSAV) $(OEDLLBASE) $(TLINKFLAGS) $(DBGINFO) $(LERRLOG)
+
+# visual and vwconsole are production targets with no debugging info
+# VC++ 5.x cvpack won't strip, so need a separate link :(
+vmsingleexe: setup visual.exe
+visual.exe: ntstart.obj prUdummy.obj stack plat ext mman prim tran res $(SELFMADELIBS)
+	echo $@ $(LERRLOG)
+	$(LINKER) /MACHINE:$(TMACHINE) \
+	ntoe.res ntstart.obj prUdummy.obj @linkfile $(ENDOBJ) \
+	/LIBPATH:$(TLIB) $(OEEXE_LIBS) $(TLINKFLAGS) \
+	/OUT:$@ /MAP:$*.map /subsystem:$(SUBSYSTEM)$(SSAV) $(LERRLOG)
+
+vmconsolesingleexe: setup vwconsole.exe
+!IF "$(TARGETOS)" == "WINCE"
+vwconsole.exe: ntstart.obj prUdummy.obj stack plat ext mman prim tran res $(SELFMADELIBS)
+	echo $@ $(LERRLOG)
+	$(LINKER) /MACHINE:$(TMACHINE) \
+	ntoe.res ntstart.obj prUdummy.obj @linkfile $(ENDOBJ) \
+	/LIBPATH:$(TLIB) $(OEEXE_LIBS) $(TLINKFLAGS) \
+	/OUT:$@ /entry:wmain /MAP:$*.map /subsystem:$(SUBSYSTEM)$(SSAV) $(LERRLOG)
+!ELSE
+vwconsole.exe: ntstart.obj prUdummy.obj stack plat ext mman prim tran res $(SELFMADELIBS)
+	echo $@ $(LERRLOG)
+	$(LINKER) /MACHINE:$(TMACHINE) \
+	ntoe.res ntstart.obj prUdummy.obj @linkfile $(ENDOBJ) \
+	/LIBPATH:$(TLIB) $(OEEXE_LIBS) $(TLINKFLAGS) \
+	/OUT:$@ /MAP:$*.map /subsystem:console$(SSAV) $(LERRLOG)
+!ENDIF
+
+# and the following include debug info if you need it...
+vmsingledbgexe: setup visualdbg.exe
+visualdbg.exe: ntstart.obj prUdummy.obj stack plat ext mman prim tran res $(SELFMADELIBS)
+	echo $@ $(LERRLOG)
+	$(LINKER) /MACHINE:$(TMACHINE) \
+	ntoe.res ntstart.obj prUdummy.obj @linkfile $(ENDOBJ) \
+	/LIBPATH:$(TLIB) $(OEEXE_LIBS) $(TLINKFLAGS) \
+	/OUT:$@ /MAP:$*.map /subsystem:$(SUBSYSTEM)$(SSAV) $(DBGINFO) $(LERRLOG)
+
+vmconsolesingledbgexe: setup vwconsoledbg.exe
+!IF "$(TARGETOS)" == "WINCE"
+vwconsoledbg.exe: ntstart.obj prUdummy.obj stack plat ext mman prim tran res $(SELFMADELIBS)
+	echo $@ $(LERRLOG)
+	$(LINKER) /MACHINE:$(TMACHINE) \
+	ntoe.res ntstart.obj prUdummy.obj @linkfile $(ENDOBJ) \
+	/LIBPATH:$(TLIB) $(OEEXE_LIBS) $(TLINKFLAGS) \
+	/OUT:$@ /entry:wmain /MAP:$*.map /subsystem:$(SUBSYSTEM)$(SSAV) $(DBGINFO) $(LERRLOG)
+!ELSE
+vwconsoledbg.exe: ntstart.obj prUdummy.obj stack plat ext mman prim tran res $(SELFMADELIBS)
+	echo $@ $(LERRLOG)
+	$(LINKER) /MACHINE:$(TMACHINE) \
+	ntoe.res ntstart.obj prUdummy.obj @linkfile $(ENDOBJ) \
+	/LIBPATH:$(TLIB) $(OEEXE_LIBS) $(TLINKFLAGS) \
+	/OUT:$@ /MAP:$*.map /subsystem:console$(SSAV) $(DBGINFO) $(LERRLOG)
+!ENDIF
+
+vmlib: setup vwnt.lib
+vwnt.lib: prUsrSupport.obj stack plat ext mman prim tran $(SELFMADELIBS)
+	echo $@ $(LERRLOG)
+	$(LIBRARIAN) prUsrSupport.obj @linkfile /LIBPATH:$(TLIB) $(OPTLIBS) /OUT:$@ $(DBGINFO) $(LERRLOG)
+
+imageMunge: setup imageMunge.exe
+imageMunge.exe: $(UTILSRC)\$(@B).c
+	$(COMPILER) /c /I$(MMANSRC) $(CFLAGS) $(UTILSRC)\$(@B).c $(ERRLOG)
+	echo $@ $(LERRLOG)
+	$(LINKER) $(@B).obj $(CONSOLELIBS) /MACHINE:$(MACHINE) \
+	/OUT:$@ /LIBPATH:$(TLIB) $(DBGINFO) $(LERRLOG)
+
+imageCompress: setup imageCompress.exe
+imageCompress.exe: $(UTILSRC)\$(@B).c zlib.lib
+	$(COMPILER) /c /I$(MMANSRC) /I$(ZLIBSRC) $(CFLAGS) $(UTILSRC)\$(@B).c $(ERRLOG)
+	echo $@ $(LERRLOG)
+	$(LINKER) $(@B).obj zlib.lib $(CONSOLELIBS) /MACHINE:$(MACHINE) \
+	/OUT:$@ /LIBPATH:$(TLIB) $(DBGINFO) $(LERRLOG)
+
+printScavengeData: setup printScavengeData.exe
+printScavengeData.exe: $(MMANSRC)\$(@B).c
+	$(COMPILER) /c /I$(MMANSRC) $(CFLAGS) $(MMANSRC)\$(@B).c $(ERRLOG)
+	echo $@ $(LERRLOG)
+	$(LINKER) $(@B).obj $(CONSOLELIBS) /MACHINE:$(MACHINE) /OUT:@ \
+	/LIBPATH:$(TLIB)
+
+clean:
+	-del *.asm
+	-del *.exe
+	-del *.exp
+	-del *.h
+	-del *.i
+	-del *.lib
+	-del *.dll
+	-del *.map
+	-del *.obj
+	-del *.pdb
+	-del *.res
+	-del *.txt
+	-del gzio.c
+
+reallyclean: clean
+	-del *.dep
+	-del *.opt
+	-del *.ncb
+	-del linkfile
+
+depend: linkfile stack.dep plat.dep ext.dep mman.dep prim.dep tran.dep zlib.dep
+
+cleandepend: setup rm.exe
+	rm $(STACKOBJSNOGLUE:.obj=.dep) $(EXTOBJS:.obj=.dep) \
+       $(PLATOBJS:.obj=.dep) $(EPOBJS:.obj=.dep) $(DLLEXEOBJS:.obj=.dep) \
+       $(MMANOBJS:.obj=.dep) $(PRIMOBJS:.obj=.dep) $(TRANOBJS:.obj=.dep) \
+	   $(ZLIBOBJS:.obj=.dep)
+
+linkfile: setup .\makefile $(MAKESRC)\makefile.vw7
+	@echo $(PLATOBJS)   >linkfile
+	@echo $(EXTOBJS)   >>linkfile
+	@echo $(PRIMOBJS)  >>linkfile
+	@echo $(MMANOBJS)  >>linkfile
+	@echo $(STACKOBJS) >>linkfile
+	@echo $(TRANOBJS)  >>linkfile
+
+init: setup depend
+
+depexes: cat.exe editdeps.exe rm.exe
+
+#=============================================================================
+# stack subsystem
+#=============================================================================
+
+stack.dep: structOffsets.h depexes $(STACKOBJSNOGLUE:.obj=.dep)
+	cat $(STACKOBJSNOGLUE:.obj=.dep) >stack.dep
+	rm $(STACKOBJSNOGLUE:.obj=.dep)
+
+{$(STACKSRC)}.c{}.dep:
+	$(TCOMPILER) /E $(STACKFLAGS) $(STACKSRC)\$(@B).c \
+	| editdeps $(@B).obj "$(HPSSRC)" HPSSRC "$(TMSDEV)" \
+        "'_(TCOMPILER) /c _(STACKFLAGS) _(STACKSRC)\_(@B).c _(ERRLOG)'" >$(@B).dep
+
+stack: setup structOffsets.h $(STACKOBJS)
+
+!IF EXIST(stack.dep)
+!INCLUDE stack.dep
+!ENDIF
+
+structOffsets.h: generate.exe
+	generate $@
+
+# Note that currently this is a huge hack as the offsets generated are those
+# on the host machine, *not* the target machine as they should be.  But with
+# WinCE there is no convenient way to run (except perhaps the emulator?)
+#
+generate.exe: $(STACKSRC)\$(@B).c
+	$(COMPILER) /o$*.exe $(CCDEFS) $(INFLAGS) $(STACKSRC)\$(@B).c /link /subsystem:console $(ERRLOG)
+
+$(EDITGLUE).exe: $(PLATSRC)\$(@B).c
+	$(COMPILER) /o$*.exe $(CCDEFS) $(INFLAGS) $(PLATSRC)\$(@B).c /link /subsystem:console $(ERRLOG)
+
+editdeps.exe: $(PLATSRC)\$(@B).c
+	$(COMPILER) /o$*.exe $(CCDEFS) $(INFLAGS) $(PLATSRC)\$(@B).c /link /subsystem:console $(ERRLOG)
+
+cat.exe: $(PLATSRC)\$(@B).c
+	$(COMPILER) /o$*.exe $(CCDEFS) $(INFLAGS) $(PLATSRC)\$(@B).c /link /subsystem:console $(ERRLOG)
+
+rm.exe: $(PLATSRC)\$(@B).c
+	$(COMPILER) /o$*.exe $(CCDEFS) $(INFLAGS) $(PLATSRC)\$(@B).c /link /subsystem:console $(ERRLOG)
+
+
+!IF "$(CPU)" == "i386"
+
+# This is for building the IA32 version
+glueNT86.obj: $*.asm
+!  IF $(MSVC_VER) >= 7
+	$(ASSEMBLER) /c /Cp /Cx /coff /W2 /Zd /Zi $*.asm $(ERRLOG)
+!  ELSE
+	$(ASSEMBLER) /Ml /W2 $*.asm; $(ERRLOG)
+!  ENDIF
+
+glueNT86.lib: $*.obj
+	$(LIBRARIAN) /CONVERT $*.obj
+
+glueNT86.asm: $*.i $(EDITGLUE).exe
+	$(EDITGLUE) < $*.i > $@
+
+glueNT86.i: structOffsets.h $(HPSSRC)\include\hps.h $(HPSSRC)\include\oop.h \
+			$(STACKSRC)\$(@B).h $(STACKSRC)\glue.m  $(STACKSRC)\glue.h
+	$(TCOMPILER) /E $(TCFLAGS) /I. /I$(STACKSRC) $(STACKSRC)\glue.m > $@
+
+!ELSEIF "$(CPU)" == "ARMV4"
+
+# This is for building the ARM version
+glueWinARM.obj: $*.asm
+	$(ASSEMBLER) $*.asm $(ERRLOG)
+
+glueWinARM.asm: $*.i $(EDITGLUE).exe
+	$(EDITGLUE) < $*.i > $@
+
+glueWinARM.i: structOffsets.h $(HPSSRC)\include\hps.h $(HPSSRC)\include\oop.h \
+			$(STACKSRC)\$(@B).h $(STACKSRC)\glue.m  $(STACKSRC)\glue.h
+	$(TCOMPILER) /E $(TCFLAGS) /I. /I$(STACKSRC) $(STACKSRC)\glue.m > $@
+
+#armicache.obj: $(PLATSRC)\$*.asm
+#	$(ASSEMBLER) $(PLATSRC)\$*.asm $(ERRLOG)
+
+!ELSEIF "$(CPU)" == "MIPS"
+
+# This is for building the MIPS version, untested and probably bug filled
+glueNTMI.obj: $*.s
+	cc -O -g0 -G0 -std -excpt -EL -c -DMIPS=1 -D_MIPS_=1 -D_LANGUAGE_ASSEMBLY -o $*.obj $*.s
+	mip2coff glueNTMI.obj
+
+glueNTMI.s: gluentmi.s
+	copy gluent.s glueNTMI.s
+
+glueNTMI.s: $*.i $(EDITGLUE).exe
+	$(EDITGLUE) < $*.i > $@
+
+glueNTMI.i: structOffsets.h $(HPSSRC)\include\hps.h $(HPSSRC)\include\oop.h \
+			$(STACKSRC)\$(@B).h $(STACKSRC)\prEntMIPS.m $(STACKSRC)\glue.m  $(STACKSRC)\glue.h
+	$(TCOMPILER) /E $(TCFLAGS) /I$(STACKSRC) $(STACKSRC)\glue.m > $@
+
+!ELSEIF "$(CPU)" == "ALPHA"
+
+# This is for building the Alpha AXP version
+glueAXP.obj: $*.s
+	$(ASSEMBLER) $*.s $(ERRLOG)
+
+glueAXP.s: $*.i $(EDITGLUE).exe
+	$(EDITGLUE) < $*.i > $@
+
+glueAXP.i: structOffsets.h $(HPSSRC)\include\hps.h $(HPSSRC)\include\oop.h \
+			$(STACKSRC)\$(@B).h $(STACKSRC)\prEntAXP.m $(STACKSRC)\glue.m  $(STACKSRC)\glue.h
+	$(TCOMPILER) /E $(TCFLAGS) /I$(STACKSRC) $(STACKSRC)\glue.m > $@
+
+!ENDIF
+
+#=============================================================================
+# plat subsystem, including res compiled resource
+#=============================================================================
+
+plat.dep: depexes $(PLATOBJS:.obj=.dep) $(EPOBJS:.obj=.dep) $(DLLEXEOBJS:.obj=.dep) $(PLATRES:.res=.dep)
+	cat $(PLATOBJS:.obj=.dep) $(EPOBJS:.obj=.dep) $(DLLEXEOBJS:.obj=.dep) $(PLATRES:.res=.dep) >plat.dep
+	rm $(PLATOBJS:.obj=.dep) $(EPOBJS:.obj=.dep) $(DLLEXEOBJS:.obj=.dep) $(PLATRES:.res=.dep)
+
+{$(PLATSRC)}.c{}.dep:
+	$(TCOMPILER) /E $(PLATFLAGS) $(PLATSRC)\$(@B).c \
+	| editdeps $(@B).obj "$(HPSSRC)" HPSSRC "$(TMSDEV)" \
+        "'_(TCOMPILER) /c _(PLATFLAGS) _(PLATSRC)\_(@B).c _(ERRLOG)'" >$(@B).dep
+
+armicache.dep:
+	$(TCOMPILER) /E $(PLATSRC)\$(@B).asm \
+	| editdeps $(@B).obj "$(HPSSRC)" HPSSRC "$(TMSDEV)" \
+		"'_(ASSEMBLER) _(PLATSRC)\_(@B).asm _(ERRLOG)'" >$(@B).dep
+
+{$(PLATSRC)}.rc{}.dep:
+	$(TCOMPILER) /E $(PLATRESFLAGS) $(PLATSRC)\$(@B).rc \
+	| editdeps $(@B).res "$(HPSSRC)" HPSSRC "$(TMSDEV)" \
+        "'_(RC) _(PLATRESFLAGS) -fo _(@) -r _(PLATSRC)\_(@B).rc _(ERRLOG)'" >$(@B).dep
+
+plat: setup $(PLATOBJS) $(EPOBJS)
+
+res: setup ntoe.res
+
+!IF EXIST(plat.dep)
+!INCLUDE plat.dep
+!ENDIF
+
+#=============================================================================
+# ext subsystem
+#=============================================================================
+
+ext.dep: depexes $(EXTOBJS:.obj=.dep)
+	cat $(EXTOBJS:.obj=.dep) >ext.dep
+	rm $(EXTOBJS:.obj=.dep)
+
+{$(EXTSRC)}.c{}.dep:
+	$(TCOMPILER) /E $(EXTFLAGS) $(EXTSRC)\$(@B).c \
+	| editdeps $(@B).obj "$(HPSSRC)" HPSSRC "$(TMSDEV)" \
+        "'_(TCOMPILER) /c _(EXTFLAGS) _(EXTSRC)\_(@B).c _(ERRLOG)'" >$(@B).dep
+
+ext: setup $(EXTOBJS)
+
+!IF EXIST(ext.dep)
+!INCLUDE ext.dep
+!ENDIF
+
+!IF "$(CPU)" == "ALPHA"
+# No optimization on exMessage.c (AXP compiler omits frames under optimization)
+exMessage.obj: $(EXTSRC)\$(@B).c
+	$(TCOMPILER) /c $(CNOOPTFLAGS) $(EXTSRC)\$(@B).c $(ERRLOG)
+!ENDIF
+
+#=============================================================================
+# mman subsystem
+#=============================================================================
+
+mman.dep: depexes $(MMANOBJS:.obj=.dep)
+	cat $(MMANOBJS:.obj=.dep) >mman.dep
+	rm $(MMANOBJS:.obj=.dep)
+
+mmCheckMap.dep:
+	$(TCOMPILER) /E $(MMANDBGOPTFLAGS) $(MMANSRC)\$(@B).c \
+	| editdeps $(@B).obj "$(HPSSRC)" HPSSRC "$(TMSDEV)" \
+        "'_(TCOMPILER) /c _(MMANDBGOPTFLAGS) _(MMANSRC)\_(@B).c _(ERRLOG)'" >$(@B).dep
+
+{$(MMANSRC)}.c{}.dep:
+	$(TCOMPILER) /E $(MMANFLAGS) $(MMANSRC)\$(@B).c \
+	| editdeps $(@B).obj "$(HPSSRC)" HPSSRC "$(TMSDEV)" \
+        "'_(TCOMPILER) /c _(MMANFLAGS) _(MMANSRC)\_(@B).c _(ERRLOG)'" >$(@B).dep
+
+mman: setup $(MMANOBJS)
+
+!IF EXIST(mman.dep)
+!INCLUDE mman.dep
+!ENDIF
+
+!IF "$(CPU)" == "ALPHA"
+# No optimization on mmInit.c (DIGITAL AXP Compiler bug)
+mmInit.obj: $(MMANSRC)\$(@B).c
+	$(TCOMPILER) /c $(CNOOPTFLAGS) $(MMANSRC)\$(@B).c $(ERRLOG)
+!ENDIF
+
+#=============================================================================
+# prim subsystem
+#=============================================================================
+
+prim.dep: depexes $(PRIMOBJS:.obj=.dep) prUsrSupport.dep prUdummy.dep
+	cat $(PRIMOBJS:.obj=.dep) prUsrSupport.dep prUdummy.dep >prim.dep
+	rm $(PRIMOBJS:.obj=.dep) prUsrSupport.dep prUdummy.dep
+
+prUdummy.dep:
+	$(TCOMPILER) /E $(PRIMFLAGS) $(PRIMSRC)\prUsrSupport.c \
+	| editdeps $(@B).obj "$(HPSSRC)" HPSSRC "$(TMSDEV)" \
+        "'_(TCOMPILER) /c /DNOUPRIMS _(PRIMFLAGS) _(PRIMSRC)\prUsrSupport.c /FoprUdummy.obj _(ERRLOG)'" >$(@B).dep
+
+{$(PRIMSRC)}.c{}.dep:
+	$(TCOMPILER) /E $(PRIMFLAGS) $(PRIMSRC)\$(@B).c \
+	| editdeps $(@B).obj "$(HPSSRC)" HPSSRC "$(TMSDEV)" \
+        "'_(TCOMPILER) /c _(PRIMFLAGS) _(PRIMSRC)\_(@B).c _(ERRLOG)'" >$(@B).dep
+
+prim: setup $(PRIMOBJS)
+
+!IF EXIST(prim.dep)
+!INCLUDE prim.dep
+!ENDIF
+
+!IF "$(CPU)" == "ALPHA"
+# No optimization on prLarge.c (DIGITAL AXP Compiler bug)
+prLarge.obj: $(PRIMSRC)\$(@B).c
+	$(TCOMPILER) /c $(CNOOPTFLAGS) $(PRIMSRC)\$(@B).c $(ERRLOG)
+!ENDIF
+
+#=============================================================================
+# tran subsystem
+#=============================================================================
+
+# Many tran sources depend on otQ.h, which is generated by 'tmakeQ'.
+#       --crl
+
+tran.dep: mcacheQ.h nmethodQ.h otQ.h depexes $(TRANOBJS:.obj=.dep)
+	cat $(TRANOBJS:.obj=.dep) >tran.dep
+	rm $(TRANOBJS:.obj=.dep)
+
+{$(TRANSRC)}.c{}.dep:
+	$(TCOMPILER) /E $(TRANFLAGS) $(TRANSRC)\$(@B).c \
+	| editdeps $(@B).obj "$(HPSSRC)" HPSSRC "$(TMSDEV)" \
+        "'_(TCOMPILER) /c _(TRANFLAGS) _(TRANSRC)\_(@B).c _(ERRLOG)'" >$(@B).dep
+
+tran: setup mcacheQ.h nmethodQ.h otQ.h $(TRANOBJS)
+
+!IF EXIST(tran.dep)
+!INCLUDE tran.dep
+!ENDIF
+
+mcacheQ.h:
+nmethodQ.h:
+otQ.h: tmakeQ.exe
+	tmakeQ
+
+# Note that currently this is a huge hack as the offsets generated are those
+# on the host machine, *not* the target machine as they should be.  But with
+# WinCE there is no convenient way to run (except perhaps the emulator?)
+#
+tmakeQ.exe: $(TRANSRC)\$(@B).c $(HPSSRC)\include\hps.h $(HPSSRC)\include\oop.h \
+			$(HPSSRC)\include\nmethod.h $(TRANSRC)\mcache.h
+	$(COMPILER) /c $(CFLAGS) $(TRANSRC)\$(@B).c $(ERRLOG)
+	$(LINKER) $*.obj $(conflags) $(conlibsdll) /MACHINE:$(MACHINE) /OUT:$@
+
+#=============================================================================
+# userprim code (none)
+#=============================================================================
+
+{$(USERSRC)}.c{}.dep:
+	$(TCOMPILER) /E $(USERFLAGS) $(USERSRC)\$(@B).c \
+	| editdeps $(@B).obj "$(HPSSRC)" HPSSRC "$(TMSDEV)" \
+        "'_(TCOMPILER) /c _(USERFLAGS) _(USERSRC)\_(@B).c _(ERRLOG)'" >$(@B).dep
+
+# DLLCC test suite
+dllccdll: setup cptst.dll
+cptst.dll: $(DLLCCSRC)\$(@B).c $(DLLCCSRC)\nt\$(@B).def vwntoeimport.lib
+	$(TCOMPILER) /c /I"$(MSDEV)\include" $(DLLCCFLAGS) $(DLLCCSRC)\$(@B).c $(ERRLOG)
+	$(LINKER) /DLL  /DEF:$(DLLCCSRC)\nt\$(@B).def $*.obj vwntoeimport.lib /OUT:cptst.dll
+
+
+#=============================================================================
+# vwft32.dll & vwft16.dll - 16-bit dllcc support DLLs for Win95/98/ME
+#=============================================================================
+
+.\types.def: $(PLATSRC)\types.def
+	copy $(PLATSRC)\types.def .
+
+vwftw95.asm: $(PLATSRC)\vwftw95.thk .\types.def
+    $(THUNKER) -t vw -o vwftw95.asm $(PLATSRC)\vwftw95.thk $(ERRLOG)
+
+vw32thk.obj: vwftw95.asm
+    $(MASM) /c /DIS_32 /W3 /Fo vw32thk.obj vwftw95.asm $(ERRLOG)
+
+w95c1632.obj: $(PLATSRC)\w95c1632.c $(PLATSRC)\ntc16.h
+	$(TCOMPILER) /c $(PLATFLAGS) -D_DLL /I$(PLATSRC) $(PLATSRC)\w95c1632.c /Fo$*.obj $(ERRLOG)
+
+FTLIBS32 = user32.lib gdi32.lib kernel32.lib version.lib msvcrt.lib libcmt.lib thunk32.lib
+
+vwft32.dll: setup w95c1632.obj vw32thk.obj
+	echo $@ $(LERRLOG)
+    link  $(LFLAGS) w95c1632.obj vw32thk.obj $(FTLIBS32) \
+    /OUT:$*.dll /def:$(PLATSRC)\w95c1632.def /implib:$*.lib /map:$*.map $(LERRLOG)
+
+vw16thk.obj: vwftw95.asm
+    $(MASM) /c /DIS_16 /W3 /Fo vw16thk.obj vwftw95.asm $(ERRLOG)
+
+w95c1616.obj: $(PLATSRC)\w95c1616.c
+    cl /c /W3 /Zp8 /G3 /Od /Fc /FR /Fd"VWFT16.PDB" $(TINFLAGS) $(PLATSRC)\w95c1616.c $(ERRLOG)
+
+vwft16.dll: w95c1616.obj vw16thk.obj $(PLATSRC)\w95c1616.def
+    link @<<
+    /NOD/NOE/MAP/COD /ALIGN:16 /ONERROR:NOEXE w95c1616.obj vw16thk.obj 
+    vwft16.dll
+    vwft16.map
+    $(PLATSRC)\w95c1616.def
+<<
+    $(R4) -40 vwft16.dll
+    mapsym vwft16
+    implib vwft16.lib w95c1616.def
+
+#=============================================================================
+# zlibinf.obj & zlibdef.obj - decompression & compression libraries
+#=============================================================================
+
+ZLIBFLAGS=$(TINFLAGS) $(CCOPTS) /I$(ZLIBSRC) $(ARCHFLAGS)
+ZLIBINFOBJS=adler32.obj infblock.obj infcodes.obj inffast.obj inflate.obj inftrees.obj infutil.obj zutil.obj
+ZLIBDEFOBJS=crc32.obj gzio.obj uncompr.obj deflate.obj trees.obj
+ZLIBOBJS=$(ZLIBINFOBJS) $(ZLIBDEFOBJS)
+
+zlib.dep: depexes $(ZLIBOBJS:.obj=.dep)
+	cat $(ZLIBOBJS:.obj=.dep) >zlib.dep
+	rm $(ZLIBOBJS:.obj=.dep)
+
+!IF "$(TARGETOS)" == "WINCE"
+gzio.dep:
+	$(TCOMPILER) /E $(ZLIBFLAGS) $(ZLIBSRC)\$(@B).c \
+	| editdeps $(@B).obj "$(HPSSRC)" HPSSRC "$(TMSDEV)" \
+        "'type _(ZLIBSRC)\_(@B).c | find /V \"errno = 0\" >_(@B).c;\
+	_(TCOMPILER) /c _(ZLIBFLAGS) _(@B).c _(ERRLOG)'" >$(@B).dep
+!ENDIF
+
+{$(ZLIBSRC)}.c{}.dep:
+	$(TCOMPILER) /E $(ZLIBFLAGS) $(ZLIBSRC)\$(@B).c \
+	| editdeps $(@B).obj "$(HPSSRC)" HPSSRC "$(TMSDEV)" \
+        "'_(TCOMPILER) /c _(ZLIBFLAGS) _(ZLIBSRC)\_(@B).c _(ERRLOG)'" >$(@B).dep
+
+zlib: setup zlibinf.lib zlibdef.lib
+
+!IF EXIST(zlib.dep)
+!INCLUDE zlib.dep
+!ENDIF
+
+zlibinf.lib: $(ZLIBINFOBJS)
+	lib /nologo /out:$@ /nodefaultlib $**
+
+zlib.lib: $(ZLIBOBJS)
+	lib /nologo /out:$@ /nodefaultlib $**
+
+minigzip: minigzip.exe
+minigzip.exe: setup zlib.lib
+	$(TCOMPILER) $(ZLIBFLAGS) $(ZLIBSRC)\$(@B).c
+	$(LINKER) $*.obj zlib.lib $(conlibsdll) /MACHINE:$(MACHINE) /OUT:$@ $(DBGINFO) $(conflags) 

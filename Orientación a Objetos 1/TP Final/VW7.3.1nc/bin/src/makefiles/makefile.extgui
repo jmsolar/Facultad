@@ -1,0 +1,31 @@
+# * SccsId is  "@(#)makefile.extgui	58.10 04/06/05";*/
+# ************************************************************************
+# * File: makefile.extgui
+# *
+# * Subsystem makefile for HPS gui parts of the generic external interface
+# *
+# *	Copyright (C) 2002 Cincom Systems, Inc.
+# *	Santa Clara, California.  All Rights Reserved.
+# *
+# *	UNPUBLISHED, CONFIDENTIAL AND PROPRIETARY.
+# ************************************************************************
+#
+SUBSYS=extgui
+SUBSYSDIR= $(HPSSDIR)/ext
+
+OBJS= \
+exDisplay.$(OBJ) \
+exIO.$(OBJ)
+
+CSRCS= \
+exDisplay.c \
+exIO.c
+
+### Subsystem target.
+
+$(SUBSYS).o: $& $(OBJS)
+	$(LD) $(LDFLAGS) -o $@ $(OBJS)
+
+include src/makefiles/makefile.include
+
+include extgui.dep

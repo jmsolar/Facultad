@@ -1,0 +1,41 @@
+# SccsId is @(#)nt.makefile.plugins	58.10 04/06/05
+########################################################################
+# File: makefile.plugins
+# 
+# Description:	Generic makefile for dynamic load user primitive Plugins
+#				on Windows using MSVC.
+#
+#	Copyright (C) 2003 Cincom Systems, Inc., Santa Clara, California,
+#
+########################################################################
+
+Plugin			= BitBltPlugin		# edit to the Plugin you want to build
+PluginSource	= src\plugins\$(Plugin)\$(Plugin).c
+PluginDir		= plugins\windows
+PluginObj		= $(PluginDir)\$(Plugin).obj
+PluginDest		= $(PluginDir)\$(Plugin).dll
+ImportLib		= vwntoeimport.lib
+HPSSRC			= F:\hps7\src	# edit to the location of the engine sources
+PluginIncludes	=	"$(HPSSRC)\include\hps.h" \
+					"$(HPSSRC)\include\oop.h" \
+					"$(HPSSRC)\include\mm.h" \
+					"$(HPSSRC)\include\mmAllocate.h" \
+					"$(HPSSRC)\include\sysOop.h" \
+					"$(HPSSRC)\include\class.h" \
+					"$(HPSSRC)\include\pr.h" \
+					"$(HPSSRC)\include\exMessage.h"
+
+default: $(PluginDest)			# to override all in fast.makefile.vw7
+
+clean:
+	del $(PluginObj)
+	del $(PluginDest)
+
+!include  "$(HPSSRC)\makeplat\nt\fast.nb.makefile.vw7"	# to get correct compilation flags
+
+$(PluginObj): $(PluginSource) $(PluginIncludes)
+        $(CC) /c $(PluginSource) /Fo$@ $(CFLAGS)
+
+$(PluginDest): $(PluginObj)
+	$(LINKER) /DLL $(PluginObj) $(ImportLib) /LIBPATH:"$(MSDEV)\lib" /OUT:$(PluginDest)
+

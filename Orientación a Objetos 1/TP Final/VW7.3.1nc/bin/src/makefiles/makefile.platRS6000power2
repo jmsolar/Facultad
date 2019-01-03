@@ -1,0 +1,80 @@
+# * SccsId is  @(#)makefile.platRS6000power2	58.10 04/06/05
+# ************************************************************************
+# * File: makefile.platRS6000power2
+# *
+# * Subsystem makefile for HPS IBM RS/6000 RISC platform, using Power2 chip.
+# * Operating System version AIX 4.2 or greater.
+# *
+# *	Copyright (C) 1999 Cincom Systems, Inc.
+# *	Santa Clara, California.  All Rights Reserved.
+# *
+# *	UNPUBLISHED, CONFIDENTIAL AND PROPRIETARY.
+# ************************************************************************
+#
+#
+SUBSYS= plat
+SUBSYSDIR= $(HPSSDIR)/plat
+
+OBJS=\
+rs6000Icache.$(OBJ) \
+bsdFile.$(OBJ) \
+bsdMisc.$(OBJ) \
+bsdSerial.$(OBJ) \
+bsdSig.$(OBJ) \
+bsdTime.$(OBJ) \
+ibmCallC.$(OBJ) \
+ibmCallCglue.$(OBJ) \
+ibmCallback.$(OBJ) \
+dlopenDynamicLoad.$(OBJ) \
+nilLeave.$(OBJ) \
+svr4MapFile.$(OBJ) \
+nilPlat.$(OBJ) \
+unxAlarm.$(OBJ) \
+unxDir.$(OBJ) \
+unxECode.$(OBJ) \
+unxError.$(OBJ) \
+unxHerald.$(OBJ) \
+unxIpc.$(OBJ) \
+unxLoadGUI.$(OBJ) \
+unxMain.$(OBJ) \
+unxMem.$(OBJ) \
+unxProc.$(OBJ) \
+unxSock.$(OBJ) \
+unxUtil.$(OBJ)
+
+CSRCS=\
+rs6000Icache.c \
+bsdFile.c \
+bsdMisc.c \
+bsdSerial.c \
+bsdSig.c \
+bsdTime.c \
+ibmCallC.c \
+ibmCallback.c \
+dlopenDynamicLoad.c \
+nilLeave.c \
+svr4MapFile.c \
+nilPlat.c \
+unxAlarm.c \
+unxDir.c \
+unxECode.c \
+unxError.c \
+unxHerald.c \
+unxIpc.c \
+unxLoadGUI.c \
+unxMain.c \
+unxMem.c \
+unxProc.c \
+unxSock.c \
+unxUtil.c
+
+SSRCS = ibmCallCglue.s
+
+### Subsystem target.
+
+$(SUBSYS).$(OBJ): $(OBJS)
+	$(LD) $(LDFLAGS) -o $@ $(OBJS)
+
+include src/makefiles/makefile.include
+
+include plat.dep

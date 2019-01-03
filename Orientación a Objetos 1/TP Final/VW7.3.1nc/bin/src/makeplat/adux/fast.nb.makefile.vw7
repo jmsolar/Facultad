@@ -1,0 +1,45 @@
+# SccsId = @(#)adux.fast.nb.makefile.vw7	58.10 04/06/05
+# Makefile for production AOSF vw7 engine
+
+INITIALIZE=if [ ! -x ./cccp ]; then ln -s /usr/local/bin/gcccpp ./cccp; fi
+
+PROCESSOR= procAXP
+PLATFORM= platAOSF
+GUI=X11
+NAME= vwadux
+
+### Compiler switches
+# If ieee_with_inexact is left off floating point primitives break.
+# why didn't Digital make the default ieee-compliant?
+# RALF 990412 removed -g2
+# RALF 990616 special handling for prLarge.o as in PP's makefile - compile without optimizations
+NO_OPT_COPTS= -tf -xtaso -ieee_with_inexact -std1
+COPTS= $(NO_OPT_COPTS) -O3
+THREADDEFS=-DNBAPI -DNBAPI_RESIGNAL_HACK -DPTHREADS -D_REENTRANT -D_THREAD_SAFE
+OPTDEFS=-DFIRENZE -DHEEGPRIVATECM 
+DEBUGDEFS=
+BASEDEFS=-DOSF32 -DSET_DATA_EXEC_PERMS
+CDEFS=$(BASEDEFS) $(OPTDEFS) $(THREADDEFS) $(DEBUGDEFS)
+
+#RALF removed -threads -lpthreads , added -pthread, 
+LIBRARIES= -transitive_link -lrt -lX11 -ldnet_stub -lm -pthread
+OBJ=o
+SHOBJ=so
+
+### Linker switches
+LD = ld
+LDFLAGS= -r -N -taso
+
+CCCP=/usr/local/bin/gcccpp
+
+include src/makefiles/makefile.generic
+
+SPLASH=bits-vw50-e-4.h
+SPLASH_INC=src/makeplat/artwork
+ 
+herald.o: src/plat/x11Splash.c $(SPLASH_INC)/$(SPLASH)
+	$(CC) -c -I$(SPLASH_INC) -DSPLASH_H=\"$(SPLASH)\" -fpic \
+            -o herald.o src/plat/x11Splash.c
+ 
+herald.so: herald.o
+	ld -o herald.so -shared herald.o

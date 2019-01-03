@@ -1,0 +1,51 @@
+# SccsId = @(#)sun5.fast.nb.makefile.vw7	58.10 04/06/05
+PROCESSOR= procSunriseNoWindows
+PLATFORM= platSolaris4
+GUI=X11
+NAME= vwsun5
+
+## NOTE ## ## NOTE ## ## NOTE ## ## NOTE ## ## NOTE ##
+## THESE MUST BE EDITED TO FIT YOUR INSTALATION ##
+CBASE = /opt/SUNWspro
+WBASE = /usr/openwin
+
+# gnucpp make dependency support
+CPP_TRAD=-traditional
+
+### Compiler switches
+PRIM_INLINE= -xlibmil
+COPTS=-mt -Xa -g -xO2 -xF -xstrconst -xlibmieee
+
+THREADDEFS= -DNBAPI -D_REENTRANT -DPTHREADS
+THREADLIBS= -lpthread -lposix4 -lthread
+
+OPTDEFS=-DOE_PROFILE
+DEBUGDEFS=
+BASEDEFS=-DFIRENZE -Dsparc -I${WBASE}/include -DFUNCPROTO=31 -D_LARGEFILE_SOURCE=1 -D_FILE_OFFSET_BITS=64 -Isrc/zlib
+CDEFS=$(BASEDEFS) $(OPTDEFS) $(THREADDEFS) $(DEBUGDEFS)
+
+LIBRARIES= -L/usr/openwin/lib $(THREADLIBS) -lsocket -lnsl -ldl -lX11 -lm
+OBJ=o
+SHOBJ=so
+
+ZLIBSUBSYS=zlib # no default zlib on Solaris so we build it ourselves
+ZLIBOBJ=zlib.o
+
+### Linker switches
+LDFLAGS= -r
+
+USG= -DUSG
+PLATOPTS= MCPP=./cccp MDPP=./cccp CC=${CBASE}/bin/cc "AS=${CBASE}/bin/fbe -L -s -xF -P ${CDEFS} ${SDEFS}"
+CC=${CBASE}/bin/cc
+
+include src/makefiles/makefile.generic
+
+SPLASH=bits-vw50-e-4.h
+SPLASH_INC=src/makeplat/artwork
+
+herald.o: src/plat/x11Splash.c $(SPLASH_INC)/$(SPLASH)
+	$(CC) -c -I$(SPLASH_INC) -DSPLASH_H=\"$(SPLASH)\" -K pic \
+		-o herald.o src/plat/x11Splash.c
+
+herald.so: herald.o
+	ld -o herald.so -G herald.o

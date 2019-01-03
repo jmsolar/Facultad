@@ -1,0 +1,46 @@
+# SccsId is @(#)sgi.fast.lg.makefile.vw7	58.10 04/06/05
+# Makefile for production SGI vw7.x engine with loadable gui
+
+SHELL=/bin/sh
+
+#non ABI version
+PROCESSOR=procMIPS
+PLATFORM=platSgi
+GUI=X11
+NAME=vwsgi
+
+### Compiler switches
+COPTS=-O2 -mips2 -g3
+BASEDEFS=-DFIRENZE -D_STANDALONE -D_ABI_SOURCE -Isrc/zlib
+OPTDEFS=-DLOADABLE_GUI=1 -DHEEGPRIVATECM
+THREADDEFS=
+DEBUGDEFS=
+CDEFS=$(BASEDEFS) $(OPTDEFS) $(THREADDEFS) $(DEBUGDEFS)
+
+LIBRARIES=-lm -lX11 -lXext -lnsl -lc
+NOGUILIBRARIES=-lm -lnsl -lc
+OBJ=o
+SHOBJ=so
+LDGUILIBFLAGS=-shared -mips2 -lm -lX11 -lXext -lnsl -lc
+
+ZLIBSUBSYS=zlib # include/zlib.h on IRIX is v1.0.4 (!!) so we build zlib
+ZLIBOBJ=zlib.o
+
+ASFLAGS=-mips2 -o32
+PLATOPTS= MCPP=./cccp MDPP=./cccp
+
+### Linker switches
+LDFLAGS=-r -mips2
+
+.IGNORE:
+include src/makefiles/makefile.generic
+
+SPLASH=bits-vw50-e-4.h
+SPLASH_INC=src/makeplat/artwork
+
+herald.o: src/plat/x11Splash.c $(SPLASH_INC)/$(SPLASH)
+	$(CC) -mips2 -c -I$(SPLASH_INC) -DSPLASH_H=\"$(SPLASH)\"  \
+            -o herald.o src/plat/x11Splash.c
+
+herald.so: herald.o makefile
+	/usr/bin/ld -mips2 -o herald.so -shared herald.o

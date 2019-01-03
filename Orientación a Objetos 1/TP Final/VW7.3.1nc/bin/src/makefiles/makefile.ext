@@ -1,0 +1,67 @@
+# * SccsId is "@(#)makefile.ext	58.10 04/06/05";*/
+# ************************************************************************
+# * File: makefile.ext
+# *
+# * Subsystem makefile for HPS non-gui parts of the generic external interface.
+# *
+# *	Copyright (C) 1999 Cincom Systems, Inc.
+# *	Santa Clara, California.  All Rights Reserved.
+# *
+# *	UNPUBLISHED, CONFIDENTIAL AND PROPRIETARY.
+# ************************************************************************
+#
+SUBSYS= ext
+SUBSYSDIR= $(HPSSDIR)/ext
+
+OBJS= \
+exCOM.$(OBJ) \
+exCallC.$(OBJ) \
+exCallSup.$(OBJ) \
+exCallback.$(OBJ) \
+exThapi.$(OBJ) \
+exEndian.$(OBJ) \
+exEnviron.$(OBJ) \
+exError.$(OBJ) \
+exExport.$(OBJ) \
+exInit.$(OBJ) \
+exLeave.$(OBJ) \
+exMemory.$(OBJ) \
+exMessage.$(OBJ) \
+exOption.$(OBJ) \
+exPrimUtil.$(OBJ) \
+exSignal.$(OBJ) \
+exTimer.$(OBJ) \
+exBitBlt.$(OBJ) \
+exInQueue.$(OBJ) \
+exScanCh.$(OBJ)
+
+CSRCS= \
+exCOM.c \
+exCallC.c \
+exCallSup.c \
+exCallback.c \
+exThapi.c \
+exEndian.c \
+exEnviron.c \
+exError.c \
+exExport.c \
+exInit.c \
+exLeave.c \
+exMemory.c \
+exMessage.c \
+exOption.c \
+exPrimUtil.c \
+exSignal.c \
+exTimer.c \
+exBitBlt.c \
+exInQueue.c \
+exScanCh.c
+
+### Subsystem target.
+
+$(SUBSYS).o: $& $(OBJS)
+	$(LD) $(LDFLAGS) -o $@ $(OBJS)
+
+include src/makefiles/makefile.include
+
+include ext.dep

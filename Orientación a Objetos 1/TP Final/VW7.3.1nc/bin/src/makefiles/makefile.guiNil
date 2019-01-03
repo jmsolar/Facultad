@@ -1,0 +1,62 @@
+# * SccsId is @(#)makefile.guiNil	58.10 04/06/05
+# ************************************************************************
+# * File: makefile.guiNil
+# *
+# * Subsystem makefile for HPS using "nil" fake GUI.
+# *
+# *	Copyright (C) 2002 Cincom Systems, Inc.
+# *	Santa Clara, California.  All Rights Reserved.
+# *
+# *	UNPUBLISHED, CONFIDENTIAL AND PROPRIETARY.
+# ************************************************************************
+#
+SUBSYS=platgui
+SUBSYSDIR=$(HPSSDIR)/plat
+
+OBJS= \
+nilAnim.$(OBJ) \
+nilCanvas.$(OBJ) \
+nilCurs.$(OBJ) \
+nilDispl.$(OBJ) \
+nilError.$(OBJ) \
+nilEvent.$(OBJ) \
+nilFont.$(OBJ) \
+nilGC.$(OBJ) \
+nilGraphics.$(OBJ) \
+nilHerald.$(OBJ) \
+nilImage.$(OBJ) \
+nilInputManager.$(OBJ) \
+nilMotif.$(OBJ) \
+nilResource.$(OBJ) \
+nilSel.$(OBJ) \
+$(SPLASH_OBJ) \
+nilWin.$(OBJ)
+
+CSRCS=  \
+nilAnim.c \
+nilCanvas.c \
+nilCurs.c \
+nilDispl.c \
+nilError.c \
+nilEvent.c \
+nilFont.c \
+nilGC.c \
+nilGraphics.c \
+nilHerald.c \
+nilImage.c \
+nilInputManager.c \
+nilMotif.c \
+nilResource.c \
+nilSel.c \
+nilWin.c
+
+SSRCS=
+
+### Subsystem target.
+
+$(SUBSYS).$(OBJ): $(OBJS)
+	$(LD) $(LDFLAGS) -o $@ $(OBJS)
+
+include src/makefiles/makefile.include
+
+include platgui.dep

@@ -1,0 +1,61 @@
+# SccsId is @(#)nt.fast.nb.makefile.vw7	58.10 04/06/05
+#==================
+#
+# Top-level makefile for HPS on Windows.  This makefile provides tailored
+# definitions that adapt the main makefile makefile.vw7 to make the various
+# engine executables, libraries and sundry support executables.
+
+# Required Definitions
+#
+# MSDEV, the location of the Visual C++ environment, should
+# be defined in the environment.  If not, define it here.
+# MSDEV=
+#
+# MSVC_VER, the version of the Visual C++ compiler
+!IFNDEF MSVC_VER
+MSVC_VER=6
+!ENDIF
+TARGETOS=WIN95 # Must define this to get MSVC++ 6 to use wsock32 rather than ws2_32
+
+# PLATFORM, from include\platNames.h
+PLATFORM=platNTPentium
+
+# HPSSRC, the location of the root of the source tree
+!IFNDEF HPSSRC
+HPSSRC=..\..\..\src
+!ENDIF
+#
+# the compilation flags for C files, C files that must be compiled with frame
+# pointers, and the check-map C files respectively.
+COPTS=/GF /Z7 /Ox /Oy- /Ow /Op /QI0f /Oi -DmemcpyInlined
+NOOPTCOPTS=$(CFLAGS) -DmemcpyInlined
+CDBGOPT=/GF /Ox /Oy /Oa /Op
+
+# Optional Definitions
+#
+# BASEDEFS, basic definitions for engine compilation
+BASEDEFS=
+#
+# OPTDEFS, optional defines for engine compilation
+OPTDEFS=$(OPTDEFS) -DFIRENZE 
+#	NBAPI, defines for the threaded C connect
+OPTDEFS=$(OPTDEFS) -DNBAPI -DNTTHREADS
+#	OE_PROFILE, defines for the engine profiler
+OPTDEFS=$(OPTDEFS) -DOE_PROFILE
+#	MEASURE, send measurements, INSTR, gc measurements, TIMING, scavenge timing
+OPTDEFS=$(OPTDEFS) #-DMEASURE -DINSTR=1 -DTIMING=1
+#
+# OPTLIBS, optional libraries for engine linking
+OPTLIBS=
+OPTLIBS=$(OPTLIBS) wsock32.lib
+OPTDEFS=$(OPTDEFS) -DWINSOCK2 -DLINK_WINSOCK=1
+#
+# DEBUGDEFS, to compile a debug engine
+DEBUGDEFS=
+
+
+# default target(s).  Delete those not required
+#
+all: engineexes enginelibs supportexes # productionexes
+
+!include "$(HPSSRC)\makeplat\nt\makefile.vw7"

@@ -1,0 +1,398 @@
+# SccsId is @(#)mac.makefile.vw7	58.10 04/06/05
+#
+# makefile: Makefile for the VisualWorks 7 Power Mac VM.
+#
+#	For MPW 3.5
+#
+#	Download MPW 3.5 from developer.apple.com/developer/Tool_Chest/MPW_etc.
+#	You will also need SCPre from developer.apple.com/developer/Tool_Chest/MPW_Website_Downloads
+#
+#	General setup requirements:
+#	- copy the MPW script 'Worksheet-vw7' to the build directory, edit it to define {HPSSRC} appropriately
+#	  and execute the make commands.
+
+# Directories
+MAKEPLAT={HPSSRC}makeplat:mac:
+HPSINC={HPSSRC}include:
+EXT={HPSSRC}ext:
+MMAN={HPSSRC}mman: 
+PLAT={HPSSRC}plat: 
+PRIM={HPSSRC}prim: 
+STACK={HPSSRC}stack: 
+TRAN={HPSSRC}tran:
+UTIL={HPSSRC}utilities:
+ZLIB={HPSSRC}zlib:
+
+# Include platform-specific make information (compilers, processor etc)
+!include "{MAKEPLAT}{PLATFORM}.make"
+
+# Creator Type
+CREATOR= 'HPS7'
+
+# Platform Configuration and Compilers expected to be set in outer makefiles
+# {assert,fast,norm}.makefile.vw7
+DISNAME=	{PROCESSOR}dis
+
+CCPRE=SCPre
+
+FLAGS=-D platform={PLATFORM} {BASEDEFS} {OPTDEFS} {DEBUGDEFS}
+# : is for malloc.h, an empty file generated in the current directory
+CFLAGS={CCFLAGS} {COPT} {FLAGS} -i "{CIncludes}" -i "{HPSINC}" -i : -i "{MAKEPLAT}" 
+COPTFLAGS={CCFLAGS} {CDBGOPT} {FLAGS} -i "{CIncludes}" -i "{HPSINC}"
+LINKFLAGS={LINKOPT}
+MPWTOOLTYPEFLAGS=-t MPST -c 'MPS '
+
+SocketLib="{MAKEPLAT}NetManage Winsock Lib"
+
+# Dependency Making Flags
+DEPFLAGS=-D processor={PROCESSOR} {FLAGS}
+
+#
+# Subsystem libraries
+#
+
+SUBLIBRARIES=:ext.lib :mman.lib :plat.lib :prim.lib :stack.lib :tran.lib :z.lib
+
+#
+# Subsystem sources
+#
+
+EXTSRC=		"{EXT}exBitBlt.c" "{EXT}exCallback.c" "{EXT}exCallC.c"		¶
+			"{EXT}exCallSup.c" "{EXT}exCOM.c" "{EXT}exDisplay.c"		¶
+			"{EXT}exEndian.c" "{EXT}exEnviron.c" "{EXT}exError.c"		¶
+			"{EXT}exExport.c" "{EXT}exLeave.c" "{EXT}exInit.c"			¶
+			"{EXT}exInQueue.c" "{EXT}exIO.c" "{EXT}exMemory.c"			¶
+			"{EXT}exMessage.c" "{EXT}exOption.c" "{EXT}exPrimUtil.c"	¶
+			"{EXT}exScanCh.c" "{EXT}exSignal.c" "{EXT}exTimer.c"
+
+PLATSRC=	"{PLAT}pmacTime.c" "{PLAT}macSerial.c" "{PLAT}macCurs.c"	¶
+			"{PLAT}macDispl.c" "{PLAT}macLeave.c" "{PLAT}macEvent.c"	¶
+			"{PLAT}macSel.c" "{PLAT}macSig.c" "{PLAT}macIO.c" 			¶
+			"{PLAT}macPreferences.c" "{PLAT}macAppleEvents.c"			¶
+			"{PLAT}macError.c" "{PLAT}macFile.c" "{PLAT}macPlat.c"		¶
+			"{PLAT}macSock.c" "{PLAT}macMain.c" "{PLAT}macHerald.c"		¶
+		 	"{PLAT}macPlatIO.c" "{PLAT}nilMapFile.c" "{PLAT}macMem.c"	¶
+			"{PLAT}macStdIO.c" "{PLAT}macNewWin.c" "{PLAT}macImage.c"	¶
+			"{PLAT}macGC.c"	"{PLAT}macGCprivate.c" "{PLAT}macAnim.c"	¶
+			"{PLAT}macFloatWin.c" "{PLAT}macECode.c" "{PLAT}macIcache.c"¶
+			"{PLAT}macDynamicLoad.c" "{PLAT}pmacCallCglue.a"			¶
+ 			"{PLAT}pmacCallC.c" "{PLAT}pmacCallUniversal.c" "{PLAT}pmacCallback.c"
+
+MMANSRC=	"{MMAN}mm.c" "{MMAN}mmAllocate.c" "{MMAN}mmBecome.c"		 ¶
+			"{MMAN}mmDebug.c" "{MMAN}mmEnumerate.c" "{MMAN}mmGarbage.c"	 ¶
+			"{MMAN}mmIncGC.c" "{MMAN}mmInit.c" "{MMAN}mmLargeSpace.c"	 ¶
+			"{MMAN}mmNewSpace.c" "{MMAN}mmOldSpace.c" "{MMAN}mmProcess.c"¶
+			"{MMAN}mmResources.c" "{MMAN}mmRt.c" "{MMAN}mmScavenge.c"	 ¶
+			"{MMAN}mmSubscript.c" "{MMAN}mmSysOop.c" "{MMAN}mmSnapshot.c"¶
+			"{MMAN}mmFinal.c" "{MMAN}mmOopStack.c" "{MMAN}mmPermSpace.c" ¶
+			"{MMAN}mmOldRt.c" "{MMAN}mmFixedSpace.c"
+
+MMANOSRC=	"{MMAN}mmCheckMap.c"
+
+PRIMSRC=	"{PRIM}pr.c" "{PRIM}prArithmetic.c" "{PRIM}prLarge.c"		¶
+			"{PRIM}prFloat.c" "{PRIM}prDouble.c" "{PRIM}prUsrSupport.c"	¶
+			"{PRIM}prCtoST.c" "{PRIM}prLinkRegistry.c"
+
+STACKSRC=	"{STACK}assertFail.c" "{STACK}checks.c" "{STACK}contexts.c"	¶
+			"{STACK}dnu.c" "{STACK}glue.m" "{STACK}hist.c"				¶
+			"{STACK}nlreturn.c" "{STACK}nsupport.c" "{STACK}primSends.c"¶
+			"{STACK}send.c" "{STACK}services.c" "{STACK}stackframe.c"	¶
+			"{STACK}stackzone.c" "{STACK}vmsupport.c"
+
+TRANSRC=	"{TRAN}nmalloc.c" "{TRAN}nmcompact.c" "{TRAN}nmlookup.c"	¶
+			"{TRAN}{DISNAME}.c" "{TRAN}tmain.c" "{TRAN}tnmprim.c"		¶
+			"{TRAN}tloop.c" "{TRAN}tspecial.c" "{TRAN}taux.c"			¶
+			"{TRAN}taction.c" "{TRAN}tcgencode.c" "{TRAN}tstack.c"		¶
+			"{TRAN}tsubr.c" "{TRAN}tloadstore.c" "{TRAN}tcodes.c"		¶
+			"{TRAN}txarith.c" "{TRAN}tmaptran.c" "{TRAN}tmaprt.c"		¶
+			"{TRAN}tpic.c" "{TRAN}tinit.c" "{TRAN}tregs.c"				¶
+			"{TRAN}tprim.c" "{TRAN}txmem.c" "{TRAN}txcontrol.c"			¶
+			"{TRAN}txprim.c" "{TRAN}txsubscript.c" "{TRAN}txopt.c"		¶
+			"{TRAN}taocount.c"
+
+ZLIBSRC=	"{ZLIB}infblock.c" "{ZLIB}infcodes.c" "{ZLIB}inffast.c"			¶
+			"{ZLIB}inflate.c" "{ZLIB}inftrees.c" "{ZLIB}infutil.c"			¶
+			"{ZLIB}zutil.c" "{ZLIB}crc32.c" "{ZLIB}gzio.c" "{ZLIB}trees.c"	¶
+			"{ZLIB}adler32.c" "{ZLIB}uncompr.c" "{ZLIB}deflate.c"
+
+# Dependencies.
+# The object files in the current directory depend on sources in each of the source directories
+
+:	Ä "{EXT}" "{MMAN}" "{PLAT}" "{PRIM}" "{STACK}" "{TRAN}" "{ZLIB}"
+
+# These generated files contain the per-source-file dependencies.
+!include :ext.dep
+!include :mman.dep
+!include :plat.dep
+!include :prim.dep
+!include :stack.dep
+!include :tran.dep
+!include :zlib.dep
+
+
+#
+# Subsystem object files and make rules
+#
+
+# Because MakeDepend doesn't preprocess it isn't smart enough to find the
+# the files actually included during compilation.  We can't add dependency
+# rules that state e.g. that hps,h depends on platform.h because if platform.h
+# is newer than hps.h make will find that hps.h needs rebuilding and hence
+# assume the target needs rebuilding.  So we add these nested dependencies
+# via MakeDepend.
+
+PLATFORM_INCLUDES=	"{HPSINC}{PLATFORM}.h" "{HPSINC}{PROCESSOR}.h"	¶
+					"{HPSINC}bits32.h" "{HPSINC}osMac.h"			¶
+					"{HPSINC}dispMac.h" "{HPSINC}floatIEEE.h"		¶
+					"{HPSINC}mmOldAbovePerm.h"
+
+EXTOBJ=		:exBitBlt.c.eo :exCallback.c.eo :exCallC.c.eo :exCallSup.c.eo :exCOM.c.eo 	¶
+			:exDisplay.c.eo :exEndian.c.eo :exEnviron.c.eo :exError.c.eo :exExport.c.eo	¶
+			:exLeave.c.eo :exInit.c.eo :exInQueue.c.eo :exIO.c.eo :exMemory.c.eo 		¶
+			:exMessage.c.eo :exOption.c.eo :exPrimUtil.c.eo :exScanCh.c.eo 				¶
+			:exSignal.c.eo :exTimer.c.eo
+.c.eo	Ä	.c {PLATFORM_INCLUDES}
+	{CC} "{EXT}{Default}.c" -o {Targ} {CFLAGS} -i "{EXT}" -i "{ZLIB}"
+
+:ext.lib ÄÄ :malloc.h {EXTOBJ}
+	{LIBRARIAN} {LIBOPTS} -o {Targ} {EXTOBJ}
+
+MMANOBJ=	:mm.c.mo :mmAllocate.c.mo :mmBecome.c.mo :mmDebug.c.mo 				¶
+			:mmEnumerate.c.mo :mmGarbage.c.mo :mmIncGC.c.mo :mmInit.c.mo		¶
+			:mmNewSpace.c.mo :mmOldSpace.c.mo :mmProcess.c.mo :mmResources.c.mo ¶
+			:mmRt.c.mo :mmScavenge.c.mo :mmSubscript.c.mo :mmSysOop.c.mo 		¶
+			:mmSnapshot.c.mo :mmFinal.c.mo :mmOopStack.c.mo :mmPermSpace.c.mo 	¶
+			:mmOldRt.c.mo :mmFixedSpace.c.mo :mmLargeSpace.c.mo :mmCheckMap.c.moo
+.c.mo	Ä	.c {PLATFORM_INCLUDES}
+	{CC} "{MMAN}{Default}.c" -o {Targ} {CFLAGS} -i "{MMAN}"
+.c.moo	Ä	.c {PLATFORM_INCLUDES}
+	{CC} "{MMAN}{Default}.c" -o {Targ} {CFLAGS} -i "{MMAN}" {CDBGOPT}
+
+:mman.lib ÄÄ {MMANOBJ}
+	{LIBRARIAN} {LIBOPTS} {MMANOBJ} -o {Targ}
+
+PLATOBJ=	:pmacTime.c.po :macSerial.c.po :macCurs.c.po :macDispl.c.po :macLeave.c.po	¶
+			:macEvent.c.po :macSel.c.po :macSig.c.po :macIO.c.po :macPreferences.c.po 	¶
+			:macPlatIO.c.po :macError.c.po :macFile.c.po :macPlat.c.po :macSock.c.po 	¶
+			:macAppleEvents.c.po nilMapFile.c.po :macHerald.c.po :macMain.c.po 			¶
+			:macMem.c.po :macIcache.c.po :macStdIO.c.po :macNewWin.c.po :macGC.c.po		¶
+			:macGCprivate.c.po :macImage.c.po :macAnim.c.po :macECode.c.po 				¶
+			:macDynamicLoad.c.po :macFloatWin.c.po :pmacCallCglue.a.po					¶
+			:pmacCallC.c.po :pmacCallUniversal.c.po :pmacCallback.c.po
+
+# -i {MAKEPLAT} is for the for winsock .h's which are in {MAKEPLAT}
+.c.po	Ä	.c {PLATFORM_INCLUDES}
+	{CC} "{PLAT}{Default}.c" -o {Targ} {CFLAGS} -i "{PLAT}" -i "{MAKEPLAT}" 
+# {PLAT}pmacCallCglue.a uses LF line ends which PPCAsm won't accept.  We should really
+# move the mac sources to platpc but as a quick fix we use StreamEdit which just
+# happens to be smart enough to convert to CR line ends.
+:pmacCallCglue.a	Ä	"{PLAT}pmacCallCglue.a"
+	StreamEdit "{PLAT}pmacCallCglue.a" >"{Targ}"
+:pmacCallCglue.a.po	Ä	:pmacCallCglue.a
+	{ASM} {ASMFLAGS} -o {Targ} -lo :pmacCallCglue.l :pmacCallCglue.a
+
+:plat.lib ÄÄ {PLATOBJ}
+	{LIBRARIAN} {LIBOPTS} {PLATOBJ} -o {Targ}
+
+PRIMOBJ=	:pr.c.ro :prArithmetic.c.ro :prLarge.c.ro :prFloat.c.ro :prDouble.c.ro 	¶
+			:prCtoST.c.ro :prLinkRegistry.c.ro
+.c.ro	Ä	.c {PLATFORM_INCLUDES}
+	{CC} "{PRIM}{Default}.c" -o {Targ} {CFLAGS} -i "{PRIM}"
+:prUdummy.c.ro	Ä	"{PRIM}prUsrSupport.c"
+	{CC} "{PRIM}prUsrSupport.c" -o {Targ} -D NOUPRIMS=1 {CFLAGS} -i "{PRIM}"
+
+:prim.lib ÄÄ {PRIMOBJ}
+	{LIBRARIAN} {LIBOPTS} {PRIMOBJ} -o {Targ}
+
+STACKOBJ=	:assertFail.c.so :checks.c.so :contexts.c.so :dnu.c.so :hist.c.so 		¶
+			:nlreturn.c.so :nsupport.c.so :primSends.c.so :send.c.so :services.c.so	¶
+			:stackframe.c.so :stackzone.c.so :vmsupport.c.so :glue.m.so
+.c.so	Ä	.c {PLATFORM_INCLUDES}
+	{CC} "{STACK}{Default}.c" -o {Targ} {CFLAGS} -i "{STACK}"
+:glue.m.so	Ä	"{STACK}glue.m" "{STACK}gluePowerMac.h" "{STACK}prEntPowerMac.m"	¶
+			"{HPSINC}regsRS6000.h" :structOffsets.h :editglue
+	{CCPRE} -e {FLAGS} {ASMPREFLAGS} -i "{HPSINC}" -i "{STACK}" -i : -o :glue.p "{STACK}glue.m"
+	:editglue <:glue.p >:glue.a
+	{ASM} {ASMFLAGS} -o {Targ} :glue.a
+:editglue		Ä	"{MAKEPLAT}editglue.c"
+	{CC} {CFLAGS} "{MAKEPLAT}editglue.c" -o {Targ}.o
+	{LINK} {Targ}.o {Libs} {LINKFLAGS} {MPWTOOLTYPEFLAGS} -o {Targ}
+
+:structOffsets.h	Ä	:generate	
+	:generate {Targ}
+	SetFile -c MPS -t TEXT {Targ}
+
+:generate		Ä	"{STACK}generate.c" {PLATFORM_INCLUDES}
+	{CC} {CFLAGS} -i "{STACK}" "{STACK}generate.c" -o {Targ}.o
+	{LINK} {Targ}.o {Libs} {LINKFLAGS} {MPWTOOLTYPEFLAGS} -o {Targ}
+
+:stack.lib ÄÄ {STACKOBJ}
+	{LIBRARIAN} {LIBOPTS} {STACKOBJ} -o {Targ}
+
+TRANOBJ=	:nmalloc.c.to :nmcompact.c.to :nmlookup.c.to :tmaprt.c.to :tpic.c.to	¶
+			:tnmprim.c.to :{DISNAME}.c.to :tmain.c.to :tloop.c.to :tspecial.c.to	¶
+			:taux.c.to :taction.c.to :tcgencode.c.to :tstack.c.to :tsubr.c.to		¶
+			:tloadstore.c.to :tcodes.c.to :tmaptran.c.to :tinit.c.to :tregs.c.to	¶
+			:tprim.c.to :txmem.c.to :txarith.c.to :txcontrol.c.to :txprim.c.to		¶
+			:txsubscript.c.to # :txopt.c.to excluded due to MrC complaint of empty compilation unit
+
+.c.to	Ä	.c	{PLATFORM_INCLUDES} ¶
+				"{HPSINC}regs68k.h" "{HPSINC}cgen68k.h" "{HPSINC}float68k.h" ¶
+				"{HPSINC}regsRS6000.h" "{HPSINC}cgenRS60x.h" "{HPSINC}floatRS6000.h"
+	{CC} "{TRAN}{Default}.c" -o {Targ} {CFLAGS} -i "{TRAN}"
+
+:mcacheQ.h	Ä	:otQ.h
+:nmethodQ.h	Ä	:otQ.h
+:otQ.h		Ä	:tmakeQ	
+	:tmakeQ
+	#SetFile -c MPS -t TEXT ":otQ.h"
+	#SetFile -c MPS -t TEXT ":nmethodQ.h"
+	#SetFile -c MPS -t TEXT ":mcacheQ.h"
+
+:tmakeQ		Ä	"{TRAN}tmakeQ.c" {PLATFORM_INCLUDES}
+	{CC} {CFLAGS} -i "{TRAN}" "{TRAN}tmakeQ.c" -o {Targ}.o
+	{LINK} {Targ}.o {Libs} {LINKFLAGS} -o {Targ}
+
+:tran.lib ÄÄ {TRANOBJ}
+	{LIBRARIAN} {LIBOPTS} {TRANOBJ} -o {Targ}
+
+ZLIBOBJ=	:adler32.c.zo :deflate.c.zo :crc32.c.zo :gzio.c.zo :infblock.c.zo		¶
+			:infcodes.c.zo :inffast.c.zo :inflate.c.zo :inftrees.c.zo :infutil.c.zo	¶
+			:trees.c.zo :uncompr.c.zo :zutil.c.zo
+.c.zo	Ä	.c
+	{CC} "{ZLIB}{Default}.c" -o {Targ} {CFLAGS} -i "{ZLIB}"
+
+:z.lib ÄÄ :malloc.h {ZLIBOBJ}
+	{LIBRARIAN} {LIBOPTS} -o {Targ} {ZLIBOBJ}
+
+#
+# Dependency generation; we make do with MakeDepend even though it doesn't preprocess.
+# A willing soul is encouraged to rewrite this using the actual preprocessor.
+#
+DEPFILES=:ext.dep :mman.dep :plat.dep :prim.dep :stack.dep :tran.dep
+depend	Ä	:malloc.h {DEPFILES}
+
+:malloc.h	ÄÄ	"{HPSSRC}makeplat:mac:blank.dep"
+	Duplicate -y -d "{HPSSRC}makeplat:mac:blank.dep" {Targ}
+	SetFile -c MPS -t TEXT {Targ}
+	
+:ext.dep	Ä
+	Duplicate -y -d "{HPSSRC}makeplat:mac:blank.dep" {Targ}
+	SetFile -c MPS -t TEXT {Targ}
+	MakeDepend -append {Targ} {DEPFLAGS} ¶
+		-i "{HPSINC}" -i "{EXT}" -objext .eo ¶
+		-skipdir "{CIncludes}" -skipfile "{HPSINC}platform.h" ¶
+		{EXTSRC}
+
+:mman.dep	Ä
+	Duplicate -y -d "{HPSSRC}makeplat:mac:blank.dep" {Targ}
+	SetFile -c MPS -t TEXT {Targ}
+	MakeDepend -append {Targ} {DEPFLAGS} ¶
+		-i "{HPSINC}" -i "{MMAN}" -objext .mo ¶
+		-skipdir "{CIncludes}" -skipfile "{HPSINC}platform.h" ¶
+		{MMANSRC} >Dev:StdOut
+	MakeDepend {DEPFLAGS} ¶
+		-i "{HPSINC}" -i "{MMAN}" -objext .moo ¶
+		-skipdir "{CIncludes}" -skipfile "{HPSINC}platform.h" ¶
+		{MMANOSRC} >>{Targ}
+	
+:plat.dep	Ä
+	Duplicate -y -d "{HPSSRC}makeplat:mac:blank.dep" {Targ}
+	SetFile -c MPS -t TEXT {Targ}
+	MakeDepend -append {Targ} {DEPFLAGS} ¶
+		-i "{HPSINC}" -i "{PLAT}" -i "{MAKEPLAT}" -objext .po ¶
+		-skipdir "{CIncludes}" -skipfile "{HPSINC}platform.h" ¶
+		{PLATSRC}
+	
+:prim.dep	Ä
+	Duplicate -y -d "{HPSSRC}makeplat:mac:blank.dep" {Targ}
+	SetFile -c MPS -t TEXT {Targ}
+	MakeDepend -append {Targ} {DEPFLAGS} ¶
+		-i "{HPSINC}" -i "{PRIM}" -objext .ro ¶
+		-skipdir "{CIncludes}" -skipfile "{HPSINC}platform.h" ¶
+		{PRIMSRC}
+	MakeDepend {DEPFLAGS} ¶
+		-i "{HPSINC}" -i "{PRIM}" -objext .ro ¶
+		-skipdir "{CIncludes}" -skipfile "{HPSINC}platform.h" ¶
+		"{PRIM}prUsrSupport.c" ¶
+	| StreamEdit -e '/:prUsrSupport.c.ro/ Replace /:prUsrSupport.c.ro/ ":prUdummy.c.ro"' >>{Targ}
+
+:stack.dep	Ä	:structOffsets.h
+	Duplicate -y -d "{HPSSRC}makeplat:mac:blank.dep" {Targ}
+	SetFile -c MPS -t TEXT {Targ}
+	MakeDepend -append {Targ} {DEPFLAGS} ¶
+		-i "{HPSINC}" -i "{STACK}" -i : -objext .so ¶
+		-skipdir "{CIncludes}" -skipfile "{HPSINC}platform.h" ¶
+		{STACKSRC} "{STACK}generate.c"
+	
+:tran.dep	Ä	:otQ.h # and implicitly mcacheQ.h & nmethodQ.h
+	Duplicate -y -d "{HPSSRC}makeplat:mac:blank.dep" {Targ}
+	SetFile -c MPS -t TEXT {Targ}
+	MakeDepend -append {Targ} {DEPFLAGS} ¶
+		-i "{HPSINC}" -i "{TRAN}" -i : -objext .to ¶
+		-skipdir "{CIncludes}" -skipfile "{HPSINC}platform.h" ¶
+		{TRANSRC} "{TRAN}tmakeQ.c"
+
+:zlib.dep	Ä
+	Duplicate -y -d "{HPSSRC}makeplat:mac:blank.dep" {Targ}
+	SetFile -c MPS -t TEXT {Targ}
+	MakeDepend -append {Targ} {DEPFLAGS} ¶
+		-i "{ZLIB}" -objext .eo -skipdir "{CIncludes}" {ZLIBSRC}
+
+ALLENGINEOBJS={EXTOBJ} {MMANOBJ} {PLATOBJ} {PRIMOBJ} {STACKOBJ} {TRANOBJ} {ZLIBOBJ}
+
+engine	Ä	{APPNAME} {APPNAME}.stub
+
+enginelib	Ä	{APPNAME}.lib
+
+hps.rcs Ä "{MAKEPLAT}hps.rez"
+	Rez "{MAKEPLAT}hps.rez" -o {Targ} -t rsrc -c RSED
+
+{APPNAME}.rcs Ä "{MAKEPLAT}resources.r" {APPNAME}.rcs
+	{CCPRE} -e {FLAGS} -D assembly -i "{HPSINC}" -o :resources.r1 "{MAKEPLAT}resources.r"
+	StreamEdit -p -e '/#line/ Delete' -e '/hashinclude/ Replace /hash/ "#"' :resources.r1 >:resources.r2
+	Rez -i "{RIncludes}" -o {APPNAME}.rcs -t rsrc -c RSED :resources.r2 "{MAKEPLAT}hps.rez"
+
+{APPNAME}	Ä	{ALLENGINEOBJS} :prUdummy.c.ro {APPNAME}.rcs
+	Delete -i -y {Targ} # delete to clear out resources, etc...
+	duplicate -y {APPNAME}.rcs {Targ}
+	SetFile -a BM -d . -c {CREATOR} -t APPL {Targ}	# set the bundle bit now so aliases don't open resedit
+	{LINK} {LINKFLAGS} -o {Targ} -t APPL -c {CREATOR} ¶
+		-@export "{HPSSRC}makeplat:mac:vwpmacexports" ¶
+		{ALLENGINEOBJS} prUdummy.c.ro {SocketLib} {Libs}
+	
+{APPNAME}.stub	ÄÄ	"{HPSSRC}makeplat:mac:vwpmacexports" # stub library for linking plugins against engine's exports
+	MakeStub -arch pwpc -fragname vwpmac -o vwpmac.stub -p "{HPSSRC}makeplat:mac:vwpmacexports"
+
+prbckref.lib	ÄÄ	"{HPSSRC}makeplat:mac:vwpmacexports" # stub library for linking plugins against engine's exports
+	MakeStub -arch pwpc -fragname vwpmac -o prbckref.lib -p "{HPSSRC}makeplat:mac:vwpmacexports"
+
+pmacbckref.lib	ÄÄ	"{HPSSRC}makeplat:mac:vwpmacexports" # stub library for linking plugins against engine's exports
+	MakeStub -arch pwpc -fragname vwpmac -o pmacbckref.lib -p "{HPSSRC}makeplat:mac:vwpmacexports"
+
+{APPNAME}.lib Ä	{SUBLIBRARIES} prUsrSupport.c.ro
+	{LIBRARIAN} -mf -xm library prUsrSupport.c.ro {SUBLIBRARIES} -o {APPNAME}.lib
+
+imageCompress	Ä	"{UTIL}imageCompress.c" :z.lib
+	{CC} "{UTIL}{Targ}.c" -o {Targ}.c.o {CFLAGS} -i "{MMAN}" -i "{ZLIB}"
+	{LINK} {LINKFLAGS} -o {Targ} -t APPL -c {CREATOR} {Targ}.c.o :z.lib {Libs}
+
+#Utility rules	
+clean	ÄÄ
+	NewFolder ::savedeps
+	For f In {DEPFILES}
+		If `Exists -f {f}`
+			Move -y {f} ::savedeps
+		End
+	End
+	Delete Å.Å
+	For f In {DEPFILES}
+		If `Exists -f ::savedeps{f}`
+			Move -y ::savedeps{f} {f}
+		End
+	End
+	Delete -y ::savedeps
+
+reallyclean	ÄÄ
+	Delete Å.Å
+

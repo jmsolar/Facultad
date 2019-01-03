@@ -1,0 +1,13 @@
+/* SccsId is @(#)nt.ntvw.rc	58.10 04/06/05 */
+/************************************************************************
+ *  File: ntvw.rc
+ *
+ *	Copyright (C) 1999 Cincom Systems, Inc.
+ *	Santa Clara, California.  All Rights Reserved.
+ *
+ ************************************************************************/
+
+#include "windows.h"
+#include "ntvw.h"
+
+ST80ICON ICON vw.ico

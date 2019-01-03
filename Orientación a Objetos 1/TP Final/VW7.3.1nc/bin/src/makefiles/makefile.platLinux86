@@ -1,0 +1,77 @@
+# * SccsId is @(#)makefile.platLinux86	58.10 04/06/05
+# ************************************************************************
+# * File: makefile.platLinux86NOGUI
+# *
+# * Subsystem makefile for HPS Linux86 platform without GUI.
+# *
+# *	Copyright (C) 1999 Cincom Systems, Inc.
+# *	Santa Clara, California.  All Rights Reserved.
+# *
+# *	UNPUBLISHED, CONFIDENTIAL AND PROPRIETARY.
+# ************************************************************************
+#
+SUBSYS=plat
+SUBSYSDIR=$(HPSSDIR)/plat
+
+OBJS=\
+unx86Icache.$(OBJ) \
+nilLeave.$(OBJ) \
+nilPlat.$(OBJ) \
+linux86CallC.$(OBJ) \
+linux86Callback.$(OBJ) \
+svr4MapFile.$(OBJ) \
+dlopenDynamicLoad.$(OBJ) \
+unxAlarm.$(OBJ) \
+unxDir.$(OBJ) \
+unxECode.$(OBJ) \
+unxError.$(OBJ) \
+unxHerald.$(OBJ) \
+unxIpc.$(OBJ) \
+unxLoadGUI.$(OBJ) \
+unxMain.$(OBJ) \
+unxMem.$(OBJ) \
+unxProc.$(OBJ) \
+unxSock.$(OBJ) \
+unxUtil.$(OBJ) \
+svr4Sig.$(OBJ) \
+usvFile.$(OBJ) \
+usvMisc.$(OBJ) \
+usvSerial.$(OBJ) \
+usvTime.$(OBJ)
+
+CSRCS=\
+unx86Icache.c \
+nilLeave.c \
+nilPlat.c \
+linux86CallC.c \
+linux86Callback.c \
+svr4MapFile.c \
+dlopenDynamicLoad.c \
+unxAlarm.c \
+unxDir.c \
+unxECode.c \
+unxError.c \
+unxHerald.c \
+unxIpc.c \
+unxLoadGUI.c \
+unxMain.c \
+unxMem.c \
+unxProc.c \
+unxSock.c \
+unxUtil.c \
+svr4Sig.c \
+usvFile.c \
+usvMisc.c \
+usvSerial.c \
+usvTime.c
+
+SSRCS=
+
+### Subsystem target.
+
+$(SUBSYS).$(OBJ): $(OBJS)
+	$(LD) $(LDFLAGS) -o $@ $(OBJS)
+
+include src/makefiles/makefile.include
+
+include plat.dep

@@ -1,0 +1,65 @@
+# * SccsId is  @(#)makefile.stack	58.10 04/06/05
+# ************************************************************************
+# * File: makefile.stack
+# *
+# * Subsystem makefile for HPS stacks and context manager.
+# *
+# *	Copyright (C) 1999 Cincom Systems, Inc.
+# *	Santa Clara, California.  All Rights Reserved.
+# *
+# *	UNPUBLISHED, CONFIDENTIAL AND PROPRIETARY.
+# ************************************************************************
+#
+SUBSYS= stack
+SUBSYSDIR= $(HPSSDIR)/stack
+
+OBJS= \
+assertFail.$(OBJ) \
+checks.$(OBJ) \
+contexts.$(OBJ) \
+dnu.$(OBJ) \
+glue.$(OBJ) \
+hist.$(OBJ) \
+nlreturn.$(OBJ) \
+nsupport.$(OBJ) \
+primSends.$(OBJ) \
+send.$(OBJ) \
+services.$(OBJ) \
+stackframe.$(OBJ) \
+stackzone.$(OBJ) \
+vmsupport.$(OBJ)
+
+CSRCS= \
+assertFail.c \
+checks.c \
+contexts.c \
+dnu.c \
+hist.c \
+nlreturn.c \
+nsupport.c \
+primSends.c \
+send.c \
+services.c \
+stackframe.c \
+stackzone.c \
+vmsupport.c
+
+MSRCS=glue.m
+
+# There is a special case for the stack subsystem; the structOffsets.h
+# file is created "on-the-fly".
+SUBDEPS= structOffsets.h
+
+stack.o: $& $(SUBDEPS) $(OBJS)
+	$(LD) $(LDFLAGS) -o $@ $(OBJS)
+
+structOffsets.h:  generate
+	./generate $@
+
+include src/makefiles/makefile.include
+
+generate: $(SUBSYSDIR)/generate.c \
+   $(IN)/hps.h $(IN)/oop.h $(IN)/frame.h $(IN)/sysOop.h $(IN)/stacks.h
+	$(CC) $(CFLAGS) -o $@ $(SUBSYSDIR)/generate.c
+
+include stack.dep

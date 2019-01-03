@@ -1,0 +1,82 @@
+### SccsId is @(#)hpux11.fast.nb.lg.makefile.vw7	58.10 04/06/05
+# Makefile to make VisualWorks 5i.x on HPUX 11 (includes THAPI)
+PROCESSOR=procHPPA
+PLATFORM=platHPPA
+GUI=X11
+NAME=vwhppa
+
+### Compiler switches
+BASECFLAGS=-D_HPUX_SOURCE -D_LARGEFILE64_SOURCE=1 -D_FILE_OFFSET_BITS=64
+#PORTABILITY=+DA1.0
+PORTABILITY=+DAportable
+# We used to use +O1 to avoid compiler bugs with +O2 and +O3.  But as of
+# ccom version HP92453-01 B.11.11.04 HP C Compiler +O2 seems to work and
+# results in a 5% speedup for the standard benchmarks.
+#COMPFLAGS=$(PORTABILITY) -g +w2 +O2 +ESlit
+COMPFLAGS=-Ae $(PORTABILITY) -g +O2 +ESlit +w1 +W 499,501,509,510,530,538,714,732
+CC=/opt/ansic/bin/cc
+GUILIBCOPTS=+z # position-independent code
+
+# We link with the C++ compiler to allow the engine to invoke C++ shared objects
+hps:=CC=/opt/aCC/bin/aCC
+hpsgui:=CC=/opt/aCC/bin/aCC
+ext.o:=CC=/opt/ansic/bin/cc
+extgui.o:=CC=/opt/ansic/bin/cc
+mman.o:=CC=/opt/ansic/bin/cc
+plat.o:=CC=/opt/ansic/bin/cc
+platgui.o:=CC=/opt/ansic/bin/cc
+prim.o:=CC=/opt/ansic/bin/cc
+stack.o:=CC=/opt/ansic/bin/cc
+tran.o:=CC=/opt/ansic/bin/cc
+zlib.o:=CC=/opt/ansic/bin/cc
+COPTS= $(BASECFLAGS) $(COMPFLAGS)
+hps:=COPTS=$(BASECFLAGS) $(PORTABILITY) -g
+hpsgui:=COPTS=$(BASECFLAGS) $(PORTABILITY) -g
+ext.o:=COPTS=$(BASECFLAGS) $(COMPFLAGS)
+extgui.o:=COPTS=$(BASECFLAGS) $(COMPFLAGS)
+mman.o:=COPTS=$(BASECFLAGS) $(COMPFLAGS)
+plat.o:=COPTS=$(BASECFLAGS) $(COMPFLAGS)
+platgui.o:=COPTS=$(BASECFLAGS) $(COMPFLAGS)
+prim.o:=COPTS=$(BASECFLAGS) $(COMPFLAGS)
+stack.o:=COPTS=$(BASECFLAGS) $(COMPFLAGS)
+tran.o:=COPTS=$(BASECFLAGS) $(COMPFLAGS)
+zlib.o:=COPTS=$(BASECFLAGS) $(COMPFLAGS)
+
+
+THREADDEFS= -DNBAPI -D_REENTRANT -DPTHREADS -D_POSIX_C_SOURCE=199506L
+OPTDEFS=-DFIRENZE -DLOADABLE_GUI=1 -DOE_PROFILE
+DEBUGDEFS=
+BASEDEFS=-DHPUX_VER=11 -DCPLUSPLUS -Isrc/zlib
+CDEFS= $(BASEDEFS) $(OPTDEFS) $(THREADDEFS) $(DEBUGDEFS)
+
+LIBRARIES= -Wl,-E -lm -ldld -L/usr/lib/X11R6 -lX11 -lpthread
+NOGUILIBRARIES= -Wl,-E -lm -ldld -lpthread
+OBJ=o
+SHOBJ=sl
+
+ZLIBSUBSYS=zlib # no default zlib on HPUX so we build it ourselves
+ZLIBOBJ=zlib.o
+
+### Linker switches
+LDFLAGS= -r
+LDGUILIBFLAGS=-b -lm -ldld -L/usr/lib/X11R6 -lX11 -lpthread
+
+### Platform options
+PLATOPTS= MCPP=./cccp MDPP=./cccp
+
+include src/makefiles/makefile.generic
+
+SPLASH=bits-vw50-e-4.h
+SPLASH_INC=src/makeplat/artwork
+
+herald.o: src/plat/x11Splash.c $(SPLASH_INC)/$(SPLASH)
+	$(CC) -c -I$(SPLASH_INC) -DSPLASH_H=\"$(SPLASH)\" +z \
+		-o herald.o src/plat/x11Splash.c
+
+herald.sl: herald.o
+		ld -o herald.sl -b herald.o
+
+use_shlib_path: hps
+	chatr -B immediate -B nonfatal +s enable hps
+
+all: herald.sl use_shlib_path

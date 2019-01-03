@@ -1,0 +1,1 @@
+bin\win\visual.exe "image\Objetos-1-2011.im"

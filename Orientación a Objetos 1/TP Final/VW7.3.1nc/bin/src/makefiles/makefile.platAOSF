@@ -1,0 +1,76 @@
+# * SccsId is  @(#)makefile.platAOSF	58.10 04/06/05
+# ************************************************************************
+# * File: makefile.platAOSF
+# *
+# * Subsystem makefile for HPS Digital Unix Alpha (AXP) platform (X11 windows).
+# *
+# *	Copyright (C) 1999 Cincom Systems, Inc.
+# *	Santa Clara, California.  All Rights Reserved.
+# *
+# *	UNPUBLISHED, CONFIDENTIAL AND PROPRIETARY.
+# ************************************************************************
+#
+SUBSYS= plat
+SUBSYSDIR= $(HPSSDIR)/plat
+
+OBJS=\
+AOSFIcache.$(OBJ) \
+bsdFile.$(OBJ) \
+bsdMem.$(OBJ) \
+bsdMisc.$(OBJ) \
+bsdSerial.$(OBJ) \
+bsdSig.$(OBJ) \
+bsdTime.$(OBJ) \
+AOSFCallC.$(OBJ) \
+AOSFCallback.$(OBJ) \
+dlopenDynamicLoad.$(OBJ) \
+nilLeave.$(OBJ) \
+nilMapFile.$(OBJ) \
+nilPlat.$(OBJ) \
+unxAlarm.$(OBJ) \
+unxDir.$(OBJ) \
+unxECode.$(OBJ) \
+unxError.$(OBJ) \
+unxHerald.$(OBJ) \
+unxIpc.$(OBJ) \
+unxLoadGUI.$(OBJ) \
+AOSFMain.$(OBJ) \
+unxProc.$(OBJ) \
+unxSock.$(OBJ) \
+unxUtil.$(OBJ)
+
+
+CSRCS=\
+AOSFIcache.c \
+bsdFile.c \
+bsdMem.c \
+bsdMisc.c \
+bsdSerial.c \
+bsdSig.c \
+bsdTime.c \
+AOSFCallC.c \
+AOSFCallback.c \
+dlopenDynamicLoad.c \
+nilLeave.c \
+nilMapFile.c \
+nilPlat.c \
+unxAlarm.c \
+unxDir.c \
+unxECode.c \
+unxError.c \
+unxHerald.c \
+unxIpc.c \
+unxLoadGUI.c \
+AOSFMain.c \
+unxProc.c \
+unxSock.c \
+unxUtil.c
+
+### Subsystem target.
+
+$(SUBSYS).o: $(OBJS)
+	$(LD) $(LDFLAGS) -o $@ $(OBJS)
+
+include src/makefiles/makefile.include
+
+include plat.dep

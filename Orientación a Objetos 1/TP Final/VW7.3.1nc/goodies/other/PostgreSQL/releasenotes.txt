@@ -1,0 +1,25 @@
+Copyright (C) 2000 - 2004  Bruce Badger (bbadger@openskills.com)
+
+This version of the Smalltalk PostgreSQL is just a patch to 1.3 003.
+
+The library contains the following new features since 1.0 023 (the version released with VW7).
+
+o Introduced at version 1.0 026:  Konrad Rosenbaum found that an AdHoc SQL tool could not be closed if the PostgreSQL connection became broken (server or network fell over).  Konrad's suggested fix (pretty much as he suggested it) is included now in PostgreSQLConnection>>close.  My thanks to Konrad.
+
+o Introduced at version 1.0 040: A port of the driver (only, not the EXDI or StORE layers) to GemStone and Squeak.  Mostly this was done as a learning exercise.  I don't expect musch use of these ports - Squeak already has PostgreSQL support.
+
+o Introduced at version 1.0 052:  Arbitrary character/string encoding is now supported.  This was added at the request of Andrei N.Sobchuck who helped with my education on the subject of encoding, plus comments, suggestions and testing effort.
+
+o Introduced at version 1.0 054:  MD5 password encoding.  Prior to this passwords (if required at all) had to be in clear text.  Not good.  Now passwords sent over the wire during login are encoded using a combination of user name, password plus some "salt".  This feature was added thanks to Michael Lucas-Smith hanging a carot in front of my nose.  Michael helped get this going with sugestions and testing effort.  One thing Michael found was that: "using 'password' authentication only took 8 characters, even though my password was 10 characters long. For some reason, I'd set my password to those first 8 characters in VW. So when I switched to MD5, it failed authentication.".  So, if in doubt, re-enter your passwords (e.g. the ones saved in your StORE profiles).
+
+Neil Dyer was also working on implementing the MD5 password encoding, and the implementation has been improved using parts of his implementation - Thanks, Neil!
+
+o Introduced at version 1.0 056: 
+Chris Lopeman of CDL -Object Link Inc. pointed out that the following sequence would cause a failure:
+		1) open a connection.
+		2) prepare a query
+		3) begin a transaction
+		4) execute the query
+		5) BOOM!!!!
+This is fixed at this version using code submitted by Chris.
+

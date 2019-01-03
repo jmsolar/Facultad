@@ -1,0 +1,45 @@
+# FileId = @(#)linuxPPC.fast.nb.makefile.vw7	58.10 04/06/05
+
+# Production Makefile for Linux PPC
+# Linux includes the GNU preprocessor so nothing needs to be done.
+INITIALIZE=if [ ! -f cccp ]; then ln -s /lib/cpp cccp; fi
+
+PROCESSOR=procRS60x
+PLATFORM=platLinuxPPC
+GUI=X11
+NAME=vwlinuxppc
+
+### Compiler switches
+GCCWARNINGFLAGS=-Wall -Wno-format -Wno-unused-value
+# With -O2 and gcc 2.95 the X platform code behaves bizarrely, e.g. bad characters displayed.
+COPTS=-g -fsigned-char -O2 -fno-defer-pop $(GCCWARNINGFLAGS) -pthread
+
+THREADDEFS=-DNBAPI -D_REENTRANT -D_LIBC_REENTRANT -DPTHREADS
+THREADLIBS=-lpthread -lrt
+
+OPTDEFS=-DFIRENZE -DOE_PROFILE
+DEBUGDEFS=
+BASEDEFS=-D_GNU_SOURCE -DPROVIDE_CrtPrimGlueMany -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64
+CDEFS=$(BASEDEFS) $(OPTDEFS) $(THREADDEFS) $(DEBUGDEFS)
+
+LIBRARIES=-export-dynamic -L/usr/X11R6/lib $(THREADLIBS) -ldl -lX11 -lm -lz
+OBJ=o
+SHOBJ=so
+
+### Linker switches
+LDFLAGS=-r
+
+# Use gcc 3, not 2.95!
+CC=/usr/local/bin/gcc
+
+include src/makefiles/makefile.generic
+
+SPLASH=bits-vw50-e-4.h
+SPLASH_INC=src/makeplat/artwork
+
+herald.o: src/plat/x11Splash.c $(SPLASH_INC)/$(SPLASH)
+	$(CC) -c -I$(SPLASH_INC) -DSPLASH_H=\"$(SPLASH)\" -fpic \
+            -o herald.o src/plat/x11Splash.c
+
+herald.so: herald.o
+	ld -o herald.so -shared herald.o

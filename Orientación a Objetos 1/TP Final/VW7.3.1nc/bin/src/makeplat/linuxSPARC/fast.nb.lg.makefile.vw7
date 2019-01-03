@@ -1,0 +1,45 @@
+# SccsId = @(#)linuxSPARC.fast.nb.lg.makefile.vw7	58.10 04/06/05
+
+# Linux includes the GNU preprocessor so nothing needs to be done.
+INITIALIZE=if [ ! -f cccp ]; then ln -s /lib/cpp cccp; fi
+
+PROCESSOR=procSunriseNoWindows
+PLATFORM=platLinuxSPARC
+GUI=X11
+NAME=vwlinuxsparc
+
+### Compiler switches
+# gcc3: GCCWARNINGFLAGS=-Wall -Wno-format -Wno-unused-value
+GCCWARNINGFLAGS=-Wall -Wno-format
+COPTS=-fsigned-char -g -O1 $(GCCWARNINGFLAGS) -pthread
+
+THREADDEFS=-DNBAPI -D_REENTRANT -D_LIBC_REENTRANT -DPTHREADS
+THREADLIBS=-lpthread
+
+OPTDEFS=-DFIRENZE -DLOADABLE_GUI=1 -DOE_PROFILE
+DEBUGDEFS=
+BASEDEFS=-D_GNU_SOURCE -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64
+CDEFS=$(BASEDEFS) $(OPTDEFS) $(THREADDEFS) $(DEBUGDEFS)
+
+LIBRARIES=-export-dynamic -L/usr/X11R6/lib $(THREADLIBS) -ldl -lX11 -lm -lz
+NOGUILIBRARIES=-export-dynamic $(THREADLIBS) -ldl -lm -lz
+OBJ=o
+SHOBJ=so
+
+### Linker switches
+LDFLAGS=-r
+LDGUILIBFLAGS=-shared -L/usr/X11R6/lib $(THREADLIBS) -ldl -lX11 -lm
+
+CC=/usr/bin/cc
+
+include src/makefiles/makefile.generic
+
+SPLASH=bits-vw50-e-4.h
+SPLASH_INC=src/makeplat/artwork
+
+herald.o: src/plat/x11Splash.c $(SPLASH_INC)/$(SPLASH)
+	$(CC) -c -I$(SPLASH_INC) -DSPLASH_H=\"$(SPLASH)\" -fpic \
+            -o herald.o src/plat/x11Splash.c
+
+herald.so: herald.o
+	ld -o herald.so -shared herald.o

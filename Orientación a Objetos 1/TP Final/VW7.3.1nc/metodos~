@@ -1,0 +1,109 @@
+IniciarSesion
+
+conRedSocial:unaRedSocial
+miRed - miRed:unaRed
+ingresar
+registrar
+resetearCampos
+resetearInputs
+
+RegistrarUsuario
+
+conRedSocial: desde:
+llamo - miRed
+aceptar
+cancelar
+
+MiCuenta
+desde:unaVentana  conUsuario:unUsuario conRed:unaRed
+llamo - miRed- miUsuario
+abrirMisFotos
+abrirMisGrupos
+abrirRed
+abrirSistemaDeRecomendacion
+cargarDatosDelUsuario:
+cargarRed
+cerrarSesion
+
+MisFotos
+desde: conUsuario:
+fotos - llamo - miListaDeFotos - miUsuario
+agregarFoto
+cargarInformacion
+cliquee
+habilitarComponentes
+deshabilitarComponentes
+eliminarFoto
+verFoto
+volver
+postOpenWith:
+
+MisGrupos
+desde: conUsuario:
+llamo - miListaDeAmigos - miUsuario
+agregarGrupo
+cliqueeAmigo
+cliqueeGrupo
+habilitarComponentesAmigo
+deshabilitarComponentesAmigo
+habilitarComponentesGrupo
+deshabilitarComponentesGrupo
+eliminarAmigo
+eliminarGrupo
+grupoSeleccionado
+verFotosDelAmigo
+volver
+postOpenWith:
+
+UsuariosDeLaRed
+desde: conUsuario: conRed:
+llamo - miListaDeGrupos - miListaDeLaRed - miUsuario - miRed
+habilitarComponentes
+deshabilitarComponentes
+cliquee
+seguir
+seleccioneGrupo
+volver
+
+SistemaDeRecomendacion
+desde: conGrupos:
+llamo - miListaDeGrupos - misGrupos
+cliqueeGrupo
+cliqueeOpcion
+deshabilitarComponentes
+organizarBienCalificadasDelGrupo:
+organizarMalCalificadasDelGrupo:
+recomendar
+volver
+grupoToString:
+stringToGrupo:
+postOpenWith:
+
+AgregarFoto
+desde: conUsuario:
+llamo - miListaDeGrupos - miUsuario
+habilitarComponentes
+deshabilitarComponentes
+cancelar
+cliquee
+compartir
+postOpenWith:
+
+CalificarFoto
+desde: conUsuario:
+llamo - miListaDeFotos - miUsuario
+guardarOpinion
+volver
+
+FotosRecomendadas
+desde: conFotos:
+llamo - miListaDeFotos - misFotos
+cliqueeFoto
+habilitarComponentes
+deshabilitarComponentes
+verFoto
+volver
+postOpenWith:
+
+
+

@@ -1,0 +1,42 @@
+# SccsId = @(#)macx.fast.nb.makefile.vw7	58.10 04/07/05
+# Makefile for production Mac OSX engine with linkable gui
+
+PROCESSOR=procRS60x
+PLATFORM=platMacX
+GUI=MacX
+NAME=vwpmac
+INITIALIZE=if [ ! -x ./cccp ]; then ln -s /usr/libexec/gcc/darwin/ppc/3.1/cpp0 ./cccp; fi
+
+### Compiler switches
+GCCWARNINGFLAGS=-Wall -Wno-format -Wno-unused-value
+# With gcc version 1175, based on gcc version 3.1 20020420 (prerelease)
+# -O2 causes a translator failure:
+# Translator problem src/tran/tloop.c 1010: Bad dest type for temp store
+# vPC = 28
+#COPTS=-g -fsigned-char -O2 -fno-defer-pop $(GCCWARNINGFLAGS)
+COPTS=-g -fsigned-char -O1 -fno-defer-pop $(GCCWARNINGFLAGS)
+THREADDEFS=-DNBAPI -DPTHREADS -D_REENTRANT
+
+#removed -traditional-cpp experimentaly
+OPTDEFS= -DFIRENZE -DUSE_POLL_SYSCALL=0 -DUSE_COMPOSITE_FOR994 -DUSE_VFORK=0 
+
+DEBUGDEFS=
+BASEDEFS=-D__ppc__ -D__BIG_ENDIAN__ -DTARGET_CPU_PPC
+#
+INCLUDEDEFS=-D__APPLE_CPP__ -D__GNUC__ -Isrc/makeplat/macx -F/System/Library/Frameworks/ -F/System/Library/Frameworks/ApplicationServices.framework/Frameworks/
+CDEFS=$(BASEDEFS) $(OPTDEFS) $(THREADDEFS) $(DEBUGDEFS) $(INCLUDEDEFS)
+
+LIBRARIES=/System/Library/Frameworks/AppKit.framework/AppKit -lobjc -lz -lgcc
+OBJ=o
+
+### Linker switches
+LD =ld
+LDFLAGS=-r
+
+### Platform options
+PLATOPTS=MCPP=./cccp MDPP=./cccp CPP_MSRC='-lang-asm' # Older gnu cpp
+#PLATOPTS=MCPP=./cccp MDPP=./cccp CPP_MSRC='-x assembler-with-cpp' # Newer gnu cpp
+
+CCCP=./cccp
+
+include src/makefiles/makefile.generic

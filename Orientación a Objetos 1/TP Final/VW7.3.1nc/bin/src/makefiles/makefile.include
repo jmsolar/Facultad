@@ -1,0 +1,150 @@
+# * SccsId is @(#)makefile.include	58.10 04/06/05
+# * ************************************************************************
+# * File: makefile.include
+# *
+# * Makefile for each subsystem
+# *	The file which includes this should define:
+# *		PLATFORM	Platform name
+# * 	SUBSYS		Subsystem name
+# *		SUBSYSDIR	Subsystem source directory
+# *		CSRCS		All the subsystem source files
+# *		INLINE		Optional inline library
+# *
+# *	Copyright (C) 1999 Cincom Systems, Inc.
+# *	Santa Clara, California.  All Rights Reserved.
+# *
+# *	UNPUBLISHED, CONFIDENTIAL AND PROPRIETARY.
+# * ************************************************************************
+#
+LD= ld
+MCPP= /lib/cpp
+MDPP= /lib/cpp
+AS= as
+#
+IN= $(HPSSDIR)/include
+#
+# The defaults for COPTS, CDEFS and CFLAGS if not defined on 'make'
+# command line.  (Note: CCCP only needs CDEFS).
+#
+COPTS = -O
+CDDEFS = $(CDEFS) $(SDEFS) -Dplatform=$(PLATFORM) -I. -I$(IN)
+CDEPDEFS = $(CDDEFS) -DFOR_DEPENDENCIES
+CFLAGS = $(COPTS) $(CDDEFS)
+#
+# This is the standard way to compile a 'c' program
+COMPILE = $(CC) $(CFLAGS) -c $(SUBSYSDIR)/`basename $@ .$(OBJ)`.c $(INLINE)
+COMPILE0 = $(CC) $(CFLAGS) -I$(SUBSYSDIR) -c `basename $@ .$(OBJ)`.c $(INLINE)
+COMPILEDBGOPT = $(CC) $(CFLAGS) $(CDBGOPT) -c $(SUBSYSDIR)/`basename $@ .$(OBJ)`.c $(INLINE)
+COMPILEDBGOPT0 = $(CC) $(CFLAGS) $(CDBGOPT) -I$(SUBSYSDIR) -c `basename $@ .$(OBJ)`.c $(INLINE)
+COMPILEOBJC = $(CC) $(CFLAGS) -c $(SUBSYSDIR)/`basename $@ .$(OBJ)`.m $(INLINE)
+COMPILEOBJC0 = $(CC) $(CFLAGS) -I$(SUBSYSDIR) -c `basename $@ .$(OBJ)`.m $(INLINE)
+ASSEMBLE = $(MCPP) -C $(CPP_MSRC) $(CDDEFS) -I$(SUBSYSDIR) $(SUBSYSDIR)/`basename $@ .$(OBJ)`.m >`basename $@ .$(OBJ)`.i ; \
+	$(MCPP) -P $(CPP_MSRC) $(CDDEFS) -I$(SUBSYSDIR) $(SUBSYSDIR)/`basename $@ .$(OBJ)`.m | \
+	sed 's/ *; */;/g' | \
+	sed 's/ *:/:/g' | \
+	tr -s ';' '\012' | $(MCPP) -P $(CDDEFS) -I$(SUBSYSDIR) | \
+	tr -s '\011' ' ' | egrep -v '^[ ]*$$' >`basename $@ .$(OBJ)`.s ;\
+    $(AS) $(ASFLAGS) -o $@ `basename $@ .$(OBJ)`.s
+ASSEMBLE0 = $(MCPP) -P $(CPP_MSRC) $(CDDEFS) -I$(SUBSYSDIR) `basename $@ .$(OBJ)`.m | \
+	sed 's/ *; */;/g' | \
+	tr -s ';' '\012' | $(MCPP) -P $(CPP_MSRC) $(CDDEFS) -I$(SUBSYSDIR) | \
+	tr -s '\011' ' ' | egrep -v '^[ ]*$$' >`basename $@ .$(OBJ)`.s ;\
+    $(AS) $(ASFLAGS) -o $@ `basename $@ .$(OBJ)`.s
+
+#
+.c:
+	@echo ERROR -- Attempt to use implicit rule to get $@
+.h:
+	@echo ERROR -- Attempt to use implicit rule to get $@
+.SCCS_GET:
+	@echo ERROR -- Attempt to use SCCS to get $@. RE-MAKE DEPENDENCIES.
+#
+#
+# The home of the cpp used to make dependencies
+CCCP = ./cccp
+#
+default: $(SUBSYS).o
+
+.PRECIOUS:  $(SUBSYS).dep
+#
+#
+$(SUBSYS).dep: $F $(SUBDEPS) $(CCCP) makefile
+	-rm -f $@
+	@-for file in $(CSRCS) ""; do \
+	 if [ -n "$$file" ]; \
+	 then if [ -f $$file ]; \
+	   then echo $$file; \
+			$(CCCP) -MM $(CPP_TRAD) $(CDEPDEFS) -I$(SUBSYSDIR) $$file >>$@; \
+		    echo '	$$(COMPILE0)' >>$@; \
+	   else echo $(SUBSYSDIR)/$$file; \
+			$(CCCP) -MM $(CPP_TRAD) $(CDEPDEFS) $(SUBSYSDIR)/$$file >>$@; \
+		    echo '	$$(COMPILE)' >>$@; \
+	   fi; \
+	 fi; \
+	done
+	@-for file in $(COPTDBGSRCS) ""; do \
+	 if [ -n "$$file" ]; \
+	 then if [ -f $$file ]; \
+	   then echo $$file; \
+			$(CCCP) -MM $(CPP_TRAD) $(CDEPDEFS) -I$(SUBSYSDIR) $$file >>$@; \
+		    echo '	$$(COMPILEDBGOPT0)' >>$@; \
+	   else echo $(SUBSYSDIR)/$$file; \
+			$(CCCP) -MM $(CPP_TRAD) $(CDEPDEFS) $(SUBSYSDIR)/$$file >>$@; \
+		    echo '	$$(COMPILEDBGOPT)' >>$@; \
+	   fi; \
+	 fi; \
+	done
+	@-for file in $(OBJCSRCS) ""; do \
+	 if [ -n "$$file" ]; \
+	 then if [ -f $$file ]; \
+	   then echo $$file; \
+			$(CCCP) -MM $(CPP_TRAD) $(CDEPDEFS) -I$(SUBSYSDIR) $$file >>$@; \
+		    echo '	$$(COMPILEOBJC0)' >>$@; \
+	   else echo $(SUBSYSDIR)/$$file; \
+			$(CCCP) -MM $(CPP_TRAD) $(CDEPDEFS) $(SUBSYSDIR)/$$file >>$@; \
+		    echo '	$$(COMPILEOBJC)' >>$@; \
+	   fi; \
+	 fi; \
+	done
+	@-for file in $(MSRCS) ""; do \
+	 if [ -n "$$file" ]; \
+	 then  if [ -f $$file ]; \
+	   then echo $$file; \
+		$(MDPP) -MM $(CPP_TRAD) $(CPP_MSRC) $(CDEPDEFS) -I$(SUBSYSDIR) $$file | \
+		sed -e "1s/\..\.o/.$(OBJ)/" >>$@ ;\
+		echo '	$$(ASSEMBLE0)' >>$@; \
+	   else echo $(SUBSYSDIR)/$$file; \
+		$(MDPP) -MM $(CPP_TRAD) $(CPP_MSRC) $(CDEPDEFS) -I$(SUBSYSDIR) $(SUBSYSDIR)/$$file | \
+		sed -e "1s/\..\.o/.$(OBJ)/" >>$@ ;\
+		echo '	$$(ASSEMBLE)' >>$@; \
+	   fi; \
+	 fi; \
+	done
+	@-for file in $(SSRCS) ""; do \
+	 if [ -n "$$file" ]; \
+	 then if [ -f $$file ]; \
+	   then echo $$file; \
+		$(CCCP) -MM $(CPP_TRAD) $(CPP_MSRC) $(CDEPDEFS) -I$(SUBSYSDIR) $$file 2>/dev/null | \
+		sed -e "1s/\..\.o/.$(OBJ)/" >$@.tmp ;\
+		if [ ! -s $@.tmp ]; then \
+			echo "`basename $$file .s`.o: $$file" >$@.tmp;\
+		fi;\
+		cat $@.tmp >>$@; rm $@.tmp; \
+		echo '	$$(AS) $$(ASFLAGS) -o $$@' $$file >>$@; \
+	   else echo $(SUBSYSDIR)/$$file; \
+		$(CCCP) -MM $(CPP_TRAD) $(CPP_MSRC) $(CDEPDEFS) $(SUBSYSDIR)/$$file 2>/dev/null | \
+		sed -e "1s/\..\.o/.$(OBJ)/" >$@.tmp ;\
+		if [ ! -s $@.tmp ]; then \
+			echo "`basename $$file .s`.o: $(SUBSYSDIR)/$$file" >$@.tmp;\
+		fi;\
+		cat $@.tmp >>$@; rm $@.tmp; \
+		echo '	$$(AS) $$(ASFLAGS) -o $$@' $(SUBSYSDIR)/$$file >>$@; \
+	   fi; \
+	 fi; \
+	touch -r makefile $(SUBSYS).dep; \
+	done
+#
+$(CCCP):
+	@[ ! -f $(CCCP) ] && make -f $(HPSSDIR)/utilities/cccp/Makefile.cpp XCFLAGS="-I$(HPSSDIR)/include -Dplatform=$(PLATFORM)" LDFLAGS="$(CPLDFLAGS)" USG=$(USG)
+#
+__@@__:

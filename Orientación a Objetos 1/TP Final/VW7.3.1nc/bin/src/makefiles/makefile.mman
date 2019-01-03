@@ -1,0 +1,77 @@
+# * SccsId is  @(#)makefile.mman	58.10 04/06/05
+# ************************************************************************
+# * File: makefile.mman
+# *
+# * Subsystem makefile for HPS memory manager
+# *
+# *	Copyright (C) 1999 Cincom Systems, Inc.
+# *	Santa Clara, California.  All Rights Reserved.
+# *
+# *	UNPUBLISHED, CONFIDENTIAL AND PROPRIETARY.
+# ************************************************************************
+#
+SUBSYS= mman
+SUBSYSDIR= $(HPSSDIR)/mman
+
+OBJS= \
+mm.$(OBJ) \
+mmAllocate.$(OBJ) \
+mmBecome.$(OBJ) \
+mmCheckMap.$(OBJ) \
+mmDebug.$(OBJ) \
+mmEnumerate.$(OBJ) \
+mmFinal.$(OBJ) \
+mmFixedSpace.$(OBJ) \
+mmGarbage.$(OBJ) \
+mmIncGC.$(OBJ) \
+mmInit.$(OBJ) \
+mmLargeSpace.$(OBJ) \
+mmNewSpace.$(OBJ) \
+mmOldRt.$(OBJ) \
+mmOldSpace.$(OBJ) \
+mmOopStack.$(OBJ) \
+mmPermSpace.$(OBJ) \
+mmProcess.$(OBJ) \
+mmResources.$(OBJ) \
+mmRt.$(OBJ) \
+mmScavenge.$(OBJ) \
+mmSnapshot.$(OBJ) \
+mmSubscript.$(OBJ) \
+mmSysOop.$(OBJ)
+
+# This is to allow us to compile the mmCheckMap code with full optimization.
+COPTDBGSRCS=mmCheckMap.c
+
+CSRCS= \
+mm.c \
+mmAllocate.c \
+mmBecome.c \
+mmDebug.c \
+mmEnumerate.c \
+mmFinal.c \
+mmGarbage.c \
+mmIncGC.c \
+mmInit.c \
+mmLargeSpace.c \
+mmFixedSpace.c \
+mmNewSpace.c \
+mmOldRt.c \
+mmOldSpace.c \
+mmOopStack.c \
+mmPermSpace.c \
+mmProcess.c \
+mmResources.c \
+mmRt.c \
+mmScavenge.c \
+mmSnapshot.c \
+mmSubscript.c \
+mmSysOop.c
+
+### Subsystem target.
+
+mman.o: $& $(OBJS)
+	$(LD) $(LDFLAGS) -o $@ $(OBJS)
+
+include src/makefiles/makefile.include
+
+include mman.dep

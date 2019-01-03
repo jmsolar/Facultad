@@ -1,0 +1,80 @@
+# * SccsId is @(#)makefile.platSgi	58.10 04/06/05
+# ************************************************************************
+# * File: makefile.platSgi
+# *
+# * Subsystem makefile for SGI & MIPS-ABI (MIPS) platforms (X11 windows).
+# *
+# *	Copyright (c) 2001 Cincom Systems Inc.
+# *	Santa Clara, California.  All Rights Reserved.
+# *	Copyright (c) 1996, 1999 Georg Heeg Objekorientierte Systeme
+# *	Dortmund, Germany.  All Rights Reserved.
+# *
+# *	UNPUBLISHED, CONFIDENTIAL AND PROPRIETARY.
+# ************************************************************************
+#
+SUBSYS= plat
+SUBSYSDIR= $(HPSSDIR)/plat
+
+OBJS=\
+mipsIcache.$(OBJ) \
+nilLeave.$(OBJ) \
+sgiPlat.$(OBJ) \
+dlopenDynamicLoad.$(OBJ) \
+sgiCallC.$(OBJ) \
+sgiCallback.$(OBJ) \
+sgiCallCglue.$(OBJ)\
+svr4MapFile.$(OBJ) \
+svr4Sig.$(OBJ) \
+unxAlarm.$(OBJ) \
+unxDir.$(OBJ) \
+unxECode.$(OBJ) \
+unxError.$(OBJ) \
+unxHerald.$(OBJ) \
+unxIpc.$(OBJ) \
+unxLoadGUI.$(OBJ) \
+unxMain.$(OBJ) \
+unxMem.$(OBJ) \
+svr4Proc.$(OBJ) \
+unxSock.$(OBJ) \
+unxUtil.$(OBJ) \
+usvFile.$(OBJ) \
+usvMisc.$(OBJ) \
+usvSerial.$(OBJ) \
+usvTime.$(OBJ)
+
+CSRCS=\
+mipsIcache.c \
+nilLeave.c \
+sgiPlat.c \
+dlopenDynamicLoad.c \
+sgiCallC.c \
+sgiCallback.c \
+svr4MapFile.c \
+svr4Sig.c \
+unxAlarm.c \
+unxDir.c \
+unxECode.c \
+unxError.c \
+unxHerald.c \
+unxIpc.c \
+unxLoadGUI.c \
+unxMain.c \
+unxMem.c \
+svr4Proc.c \
+unxSock.c \
+unxUtil.c \
+usvFile.c \
+usvMisc.c \
+usvSerial.c \
+usvTime.c
+
+SSRCS= sgiCallCglue.s
+
+### Subsystem target.
+
+$(SUBSYS).$(OBJ): $(OBJS)
+	$(LD) $(LDFLAGS) -o $@ $(OBJS)
+
+include src/makefiles/makefile.include
+
+include plat.dep

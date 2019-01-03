@@ -1,0 +1,61 @@
+# * SccsId is @(#)makefile.prim	58.10 04/06/05
+# ************************************************************************
+# * File: makefile.prim
+# *
+# * Subsystem makefile for HPS non-I/O primitives.
+# *
+# *	Copyright (C) 1999 Cincom Systems, Inc.
+# *	Santa Clara, California.  All Rights Reserved.
+# *
+# *	UNPUBLISHED, CONFIDENTIAL AND PROPRIETARY.
+# ************************************************************************
+#
+SUBSYS= prim
+SUBSYSDIR= $(HPSSDIR)/prim
+
+OBJS= \
+pr.$(OBJ) \
+prArithmetic.$(OBJ) \
+prCtoST.$(OBJ) \
+prDouble.$(OBJ) \
+prSmallDouble.$(OBJ) \
+prFloat.$(OBJ) \
+prLarge.$(OBJ) \
+prLinkRegistry.$(OBJ)
+
+CSRCS= \
+pr.c \
+prArithmetic.c \
+prCtoST.c \
+prDouble.c \
+prSmallDouble.c \
+prFloat.c \
+prLarge.c \
+prLinkRegistry.c \
+prUsrSupport.c
+
+
+### Subsystem target.
+# we have four object outputs from this make:
+#	the prim module itself
+#	the dummy user-primitive support module
+#	the real user-primitive support module
+#	the dummy user-primitive support module that states the gui is linked in
+# the final link chooses the correct UP support module
+
+prim.o: $& $(OBJS) prUdummy.$(OBJ) prUGdummy.$(OBJ)
+	$(LD) $(LDFLAGS) -o $@ $(OBJS)
+
+prUdummy.$(OBJ): $(SUBSYSDIR)/prUsrSupport.c prUsrSupport.$(OBJ)
+	@cp $(SUBSYSDIR)/prUsrSupport.c prUdummy.c; chmod u+w prUdummy.c
+	$(CC) -DNOUPRIMS=1 -DGUILINKED=0 $(CFLAGS) -Isrc/$(SUBSYS) -c prUdummy.c
+	@rm prUdummy.c
+
+prUGdummy.$(OBJ): $(SUBSYSDIR)/prUsrSupport.c prUsrSupport.$(OBJ)
+	@cp $(SUBSYSDIR)/prUsrSupport.c prUGdummy.c; chmod u+w prUGdummy.c
+	$(CC) -DNOUPRIMS=1 $(CFLAGS) -Isrc/$(SUBSYS) -c prUGdummy.c
+	@rm prUGdummy.c
+
+include src/makefiles/makefile.include
+
+include prim.dep

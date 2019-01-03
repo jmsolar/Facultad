@@ -1,0 +1,2906 @@
+<?xml version="1.0"?>
+
+<!-- This file defines the parcels displayed by the Suggestions tab of the ParcelManager. Its usual location is $(VISUALWORKS)/parcels/suggestions.xml. It can be regenerated with the default set of parcels by the utility method ParcelFavoritesTool class>>saveDefaultSuggestionsAs:. -->
+
+<group description="" name="Suggestions">
+
+	<subgroups>
+
+		<group description="These are the most essential components you may want to have in your image" name="Essentials">
+
+			<subgroups></subgroups>
+
+			<items>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>parcels</filename-component>
+
+						<filename-component>UIPainter.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>parcels</filename-component>
+
+						<filename-component>VWHelp.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>advanced</filename-component>
+
+						<filename-component>AllAdvancedTools.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>dllcc</filename-component>
+
+						<filename-component>DLLCC.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>packaging</filename-component>
+
+						<filename-component>RuntimePackager.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>parc</filename-component>
+
+						<filename-component>ProgrammingExtensions.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>other</filename-component>
+
+						<filename-component>SUnit</filename-component>
+
+						<filename-component>SUnit.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>other</filename-component>
+
+						<filename-component>SUnit</filename-component>
+
+						<filename-component>SUnitUI.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>parcels</filename-component>
+
+						<filename-component>RBSUnitExtensions.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+			</items>
+
+		</group>
+
+		<group description="System components to make a developer's life easier" name="Developer Tools">
+
+			<subgroups></subgroups>
+
+			<items>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>advanced</filename-component>
+
+						<filename-component>ATBenchmarks.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>advanced</filename-component>
+
+						<filename-component>ATProfilingCore.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>advanced</filename-component>
+
+						<filename-component>ATProfilingUI.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>advanced</filename-component>
+
+						<filename-component>ATSystemAnalysis.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>parcels</filename-component>
+
+						<filename-component>UIPainter.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>other</filename-component>
+
+						<filename-component>Heeg</filename-component>
+
+						<filename-component>GHTools.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>store</filename-component>
+
+						<filename-component>StoreForOracle.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>store</filename-component>
+
+						<filename-component>StoreForSqlServer.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>other</filename-component>
+
+						<filename-component>PostgreSQL</filename-component>
+
+						<filename-component>StoreForPostgreSQL.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>other</filename-component>
+
+						<filename-component>DB2</filename-component>
+
+						<filename-component>StoreForDB2.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>parc</filename-component>
+
+						<filename-component>Method-History.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>icc</filename-component>
+
+						<filename-component>ADvance2.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>webservices</filename-component>
+
+						<filename-component>XMLObjectBindingWizard.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+			</items>
+
+		</group>
+
+		<group description="Enhancements of the existing tools and widgets" name="Environment Enhancements">
+
+			<subgroups></subgroups>
+
+			<items>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>parc</filename-component>
+
+						<filename-component>ProgrammingExtensions.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>other</filename-component>
+
+						<filename-component>AutoComplete.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>other</filename-component>
+
+						<filename-component>Heeg</filename-component>
+
+						<filename-component>ComposedTextEditor.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>parc</filename-component>
+
+						<filename-component>CodingFeel.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>parc</filename-component>
+
+						<filename-component>ColorEditing.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>other</filename-component>
+
+						<filename-component>MagicKeys</filename-component>
+
+						<filename-component>MagicKeys.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>other</filename-component>
+
+						<filename-component>RB_Tabs.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>other</filename-component>
+
+						<filename-component>LearningMenus.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>other</filename-component>
+
+						<filename-component>ExtraEmphases.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>other</filename-component>
+
+						<filename-component>ThreePaneSelectorsBrowser</filename-component>
+
+						<filename-component>ThreePaneSelectorsBrowser.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>parc</filename-component>
+
+						<filename-component>RBClassDefinitionTool.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>parc</filename-component>
+
+						<filename-component>RBBytecodeTool.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>parc</filename-component>
+
+						<filename-component>PDPMenuShortcutEditor.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>parcels</filename-component>
+
+						<filename-component>RBRegexExtensions.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>parc</filename-component>
+
+						<filename-component>DefaultPackageNamespaces.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>other</filename-component>
+
+						<filename-component>RBCodeHighlighting.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+			</items>
+
+		</group>
+
+		<group description="Store connects and useful utilities" name="Store Tools">
+
+			<subgroups></subgroups>
+
+			<items>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>store</filename-component>
+
+						<filename-component>StoreForOracle.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>store</filename-component>
+
+						<filename-component>StoreForSqlServer.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>other</filename-component>
+
+						<filename-component>PostgreSQL</filename-component>
+
+						<filename-component>StoreForPostgreSQL.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>other</filename-component>
+
+						<filename-component>InterBase</filename-component>
+
+						<filename-component>StoreForInterBase.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>other</filename-component>
+
+						<filename-component>DB2</filename-component>
+
+						<filename-component>StoreForDB2.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>other</filename-component>
+
+						<filename-component>StoreReplication.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>other</filename-component>
+
+						<filename-component>StoreForAccess.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>parc</filename-component>
+
+						<filename-component>ExportDatabaseUI.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>parcels</filename-component>
+
+						<filename-component>RBStoreExtensions.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>preview</filename-component>
+
+						<filename-component>glorp</filename-component>
+
+						<filename-component>StoreForGlorpVWUI.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+			</items>
+
+		</group>
+
+		<group description="Tools and frameworks useful in application development and deployment" name="Application Development">
+
+			<subgroups></subgroups>
+
+			<items>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>dllcc</filename-component>
+
+						<filename-component>DLLCC.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>parcels</filename-component>
+
+						<filename-component>BOSS.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>parcels</filename-component>
+
+						<filename-component>Headless.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>parcels</filename-component>
+
+						<filename-component>Compression-ZLib.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>parc</filename-component>
+
+						<filename-component>I18n.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>packaging</filename-component>
+
+						<filename-component>RuntimePackager.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>plugin</filename-component>
+
+						<filename-component>PluginDev.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>packaging</filename-component>
+
+						<filename-component>ImageCompression.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>webservices</filename-component>
+
+						<filename-component>XMLObjectMarshalers.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>parcels</filename-component>
+
+						<filename-component>XPath.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>net</filename-component>
+
+						<filename-component>ASN1.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+			</items>
+
+		</group>
+
+		<group description="VisualWorks Web Application Server" name="Application Server">
+
+			<subgroups></subgroups>
+
+			<items>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>other</filename-component>
+
+						<filename-component>seaside</filename-component>
+
+						<filename-component>SeasideForWebToolKit.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>web</filename-component>
+
+						<filename-component>WebToolkit.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>wavedev</filename-component>
+
+						<filename-component>VisualWave.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>wavedev</filename-component>
+
+						<filename-component>VisualWaveDemos.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>waveserver</filename-component>
+
+						<filename-component>WaveLoad-Client.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>waveserver</filename-component>
+
+						<filename-component>WaveLoad-Server.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+			</items>
+
+		</group>
+
+		<group description="Database interfaces" name="Database">
+
+			<subgroups></subgroups>
+
+			<items>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>database</filename-component>
+
+						<filename-component>ODBCThapiEXDI.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>database</filename-component>
+
+						<filename-component>ODBCEXDI.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>database</filename-component>
+
+						<filename-component>OracleAlphaUnixThapiEXDI.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>database</filename-component>
+
+						<filename-component>OracleEXDI.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>database</filename-component>
+
+						<filename-component>OracleThapiEXDI.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>database</filename-component>
+
+						<filename-component>OracleLens-Dev.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>database</filename-component>
+
+						<filename-component>OracleLens.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>other</filename-component>
+
+						<filename-component>PostgreSQL</filename-component>
+
+						<filename-component>PostgreSQLEXDI.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>other</filename-component>
+
+						<filename-component>DB2</filename-component>
+
+						<filename-component>DB2EXDI.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>other</filename-component>
+
+						<filename-component>DB2</filename-component>
+
+						<filename-component>DB2ThapiEXDI.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>other</filename-component>
+
+						<filename-component>OmniBase</filename-component>
+
+						<filename-component>OmniBase.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>preview</filename-component>
+
+						<filename-component>glorp</filename-component>
+
+						<filename-component>Glorp.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+			</items>
+
+		</group>
+
+		<group description="Various frameworks, protocols and tools for distributed computing" name="Distributed Computing">
+
+			<subgroups></subgroups>
+
+			<items>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>opentalk</filename-component>
+
+						<filename-component>Opentalk-STST.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>opentalk</filename-component>
+
+						<filename-component>Opentalk-XML.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>opentalk</filename-component>
+
+						<filename-component>Opentalk-HTTP.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>opentalk</filename-component>
+
+						<filename-component>Opentalk-SOAP.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>opentalk</filename-component>
+
+						<filename-component>Opentalk-CGI.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>opentalk</filename-component>
+
+						<filename-component>Opentalk-Core-Services.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>opentalk</filename-component>
+
+						<filename-component>Opentalk-Groups.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>opentalk</filename-component>
+
+						<filename-component>Opentalk-Tools-Console.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>opentalk</filename-component>
+
+						<filename-component>Opentalk-Tools-Monitor.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>dst</filename-component>
+
+						<filename-component>DST_Core_Services.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>dst</filename-component>
+
+						<filename-component>DST_COS_Services.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>dst</filename-component>
+
+						<filename-component>DST_I3.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>dst</filename-component>
+
+						<filename-component>DST_Tools_Development.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>dst</filename-component>
+
+						<filename-component>DST_Sample.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+			</items>
+
+		</group>
+
+		<group description="Frameworks, protocols and tools for Web Services" name="Web Services">
+
+			<subgroups></subgroups>
+
+			<items>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>webservices</filename-component>
+
+						<filename-component>XMLObjectMarshalers.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>webservices</filename-component>
+
+						<filename-component>SOAP.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>webservices</filename-component>
+
+						<filename-component>WSDL.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>webservices</filename-component>
+
+						<filename-component>WSDLTool.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>webservices</filename-component>
+
+						<filename-component>WebServicesClient.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>webservices</filename-component>
+
+						<filename-component>WebServicesServer.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>webservices</filename-component>
+
+						<filename-component>WebServicesDemo.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>webservices</filename-component>
+
+						<filename-component>UDDIPublish.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>webservices</filename-component>
+
+						<filename-component>UDDIInquire.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>webservices</filename-component>
+
+						<filename-component>UDDISearchTool.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>opentalk</filename-component>
+
+						<filename-component>Opentalk-XML.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>opentalk</filename-component>
+
+						<filename-component>Opentalk-SOAP.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>opentalk</filename-component>
+
+						<filename-component>Opentalk-HTTP.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>opentalk</filename-component>
+
+						<filename-component>Opentalk-CGI.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>webservices</filename-component>
+
+						<filename-component>WSDLWizard.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>webservices</filename-component>
+
+						<filename-component>XMLObjectBindingWizard.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>webservices</filename-component>
+
+						<filename-component>XMLObjectBindingTool.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+
+			</items>
+
+		</group>
+
+		<group description="Drawing and image processing tools and frameworks" name="Graphics">
+
+			<subgroups></subgroups>
+
+			<items>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>parcels</filename-component>
+
+						<filename-component>BGOK.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>parcels</filename-component>
+
+						<filename-component>PNGImageReader.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>parcels</filename-component>
+
+						<filename-component>ArborGIFReaderWriter.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>other</filename-component>
+
+						<filename-component>Jun</filename-component>
+
+						<filename-component>Jun633.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>other</filename-component>
+
+						<filename-component>HotDraw</filename-component>
+
+						<filename-component>HotDraw.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+			</items>
+
+		</group>
+
+		<group description="Frameworks and tools for web serving and other network communication issues" name="Networking">
+
+			<subgroups></subgroups>
+
+			<items>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>net</filename-component>
+
+						<filename-component>NetClients.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>net</filename-component>
+
+						<filename-component>IMAP.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>net</filename-component>
+
+						<filename-component>Mail.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>net</filename-component>
+
+						<filename-component>MIME.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>net</filename-component>
+
+						<filename-component>NetConfigTool.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>net</filename-component>
+
+						<filename-component>HTTP.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>net</filename-component>
+
+						<filename-component>HTTPS.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>net</filename-component>
+
+						<filename-component>FTP.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>net</filename-component>
+
+						<filename-component>POP3.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>net</filename-component>
+
+						<filename-component>SMTP.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>web</filename-component>
+
+						<filename-component>WebToolkit.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>other</filename-component>
+
+						<filename-component>WikiWorks</filename-component>
+
+						<filename-component>WikiWorks.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>other</filename-component>
+
+						<filename-component>Pongo</filename-component>
+
+						<filename-component>pongo.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>other</filename-component>
+
+						<filename-component>TypeLess</filename-component>
+
+						<filename-component>IRC-Client-TypeLess.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>other</filename-component>
+
+						<filename-component>TwoflowerBundle.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>net</filename-component>
+
+						<filename-component>WebSupport.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+			</items>
+
+		</group>
+
+		<group description="Mac-specific utilities and add-ons" name="OS-Mac">
+
+			<subgroups></subgroups>
+
+			<items>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>dllcc</filename-component>
+
+						<filename-component>DLLCC.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>parcels</filename-component>
+
+						<filename-component>MacPrintingSupport.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+			</items>
+
+		</group>
+
+		<group description="Windows-specific utilities and add-ons" name="OS-Windows">
+
+			<subgroups></subgroups>
+
+			<items>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>dllcc</filename-component>
+
+						<filename-component>DLLCC.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>parc</filename-component>
+
+						<filename-component>WindowsGoodies.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>parc</filename-component>
+
+						<filename-component>Windows-Shortcuts.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>other</filename-component>
+
+						<filename-component>WinProcess.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>DotNETConnect</filename-component>
+
+						<filename-component>DotNETConnectInstaller.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>other</filename-component>
+
+						<filename-component>SmallCOMX</filename-component>
+
+						<filename-component>SmallCOMX Example.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>plugin</filename-component>
+
+						<filename-component>PluginDev.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>com</filename-component>
+
+						<filename-component>COM-All.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+			</items>
+
+		</group>
+
+		<group description="Cryptographic algorithms and security technologies: encryption, signatures, hashes, certificates, etc" name="Security">
+
+			<subgroups></subgroups>
+
+			<items>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>security</filename-component>
+
+						<filename-component>MD5.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>security</filename-component>
+
+						<filename-component>SHA.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>security</filename-component>
+
+						<filename-component>ARC4.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>security</filename-component>
+
+						<filename-component>Blowfish.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>security</filename-component>
+
+						<filename-component>AES.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>security</filename-component>
+
+						<filename-component>DES.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>security</filename-component>
+
+						<filename-component>RSA.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>security</filename-component>
+
+						<filename-component>DSA.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>security</filename-component>
+
+						<filename-component>DH.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>security</filename-component>
+
+						<filename-component>X509.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>security</filename-component>
+
+						<filename-component>SSL.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>security</filename-component>
+
+						<filename-component>PKCS5.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+			</items>
+
+		</group>
+
+		<group description="Artifacts subtle and wizardly" name="Advanced Utilities">
+
+			<subgroups></subgroups>
+
+			<items>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>advanced</filename-component>
+
+						<filename-component>ATParserCompiler.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>advanced</filename-component>
+
+						<filename-component>ATMetaNumerics.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>other</filename-component>
+
+						<filename-component>T-Gen</filename-component>
+
+						<filename-component>T-Gen.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>other</filename-component>
+
+						<filename-component>Regex11.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>parc</filename-component>
+
+						<filename-component>vmplugin</filename-component>
+
+						<filename-component>HPSVMPrimitivePlugins.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>other</filename-component>
+
+						<filename-component>SmaCC</filename-component>
+
+						<filename-component>SmaCC Development UI.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+			</items>
+
+		</group>
+
+		<group description="Packages for backward-compatibility and compatibility with other Smalltalk implementations" name="Compatibility">
+
+			<subgroups></subgroups>
+
+			<items>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>parc</filename-component>
+
+						<filename-component>Fileout30.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>parcels</filename-component>
+
+						<filename-component>ANSICompatibility.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>parcels</filename-component>
+
+						<filename-component>ImmutabilityCompatibility.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+			</items>
+
+		</group>
+
+		<group description="Games and eye candy" name="Toys">
+
+			<subgroups></subgroups>
+
+			<items>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>other</filename-component>
+
+						<filename-component>Gremlin.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>other</filename-component>
+
+						<filename-component>Tetris.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>other</filename-component>
+
+						<filename-component>GoldenMonkey.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>other</filename-component>
+
+						<filename-component>Reversi.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>other</filename-component>
+
+						<filename-component>WinMineGame.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>other</filename-component>
+
+						<filename-component>CastleMicrosloth.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>parc</filename-component>
+
+						<filename-component>Xonix</filename-component>
+
+						<filename-component>Xonix.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>other</filename-component>
+
+						<filename-component>BugTraffic</filename-component>
+
+						<filename-component>BugTraffic.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>parc</filename-component>
+
+						<filename-component>JavaAsteroids</filename-component>
+
+						<filename-component>JavaAsteroids.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>parc</filename-component>
+
+						<filename-component>Steroids</filename-component>
+
+						<filename-component>Steroids.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>other</filename-component>
+
+						<filename-component>pongo</filename-component>
+
+						<filename-component>pongo.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>other</filename-component>
+
+						<filename-component>TypeLess</filename-component>
+
+						<filename-component>IRC-Client-TypeLess.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>goodies</filename-component>
+
+						<filename-component>other</filename-component>
+
+						<filename-component>TwoflowerBundle.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+			</items>
+
+		</group>
+
+		<group description="Japanese Locale" name="Japanese Locale">
+
+			<subgroups></subgroups>
+
+			<items>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>japanese</filename-component>
+
+						<filename-component>JapaneseLocale.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>japanese</filename-component>
+
+						<filename-component>JaUIPainter.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>japanese</filename-component>
+
+						<filename-component>JaCTLibEXDI.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>japanese</filename-component>
+
+						<filename-component>JaOracleEXDI.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>japanese</filename-component>
+
+						<filename-component>JaWebToolkit.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>japanese</filename-component>
+
+						<filename-component>JaURISupport.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+				<parcel>
+
+					<filename>
+
+						<filename-component>$(VISUALWORKS)</filename-component>
+
+						<filename-component>japanese</filename-component>
+
+						<filename-component>JaVisualWave.pcl</filename-component>
+
+					</filename>
+
+				</parcel>
+
+			</items>
+
+		</group>
+
+	</subgroups>
+
+	<items></items>
+
+</group>

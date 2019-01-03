@@ -1,0 +1,15 @@
+Copyright (C) 2000 - 2004  Bruce Badger (bbadger@openskills.com)
+
+The logging facilities of the PostgreSQL driver make it possible to capture detailed information about the messages that flow between the driver and the PostgreSQL backend services.
+
+A PostgreSQLConnectionLog captures the message traffic from one or more connections and writes the details to a stream. 
+
+To create a PostgreSQLConnectionLog to monitor a single connection, use:
+		PostgreSQLConnectionLog logEverythingFor: <connection> to: <write stream>
+
+To create a PostgreSQLConnectionLog to monitor all connections, use:
+		PostgreSQLConnectionLog logEverythingTo: <write stream>
+
+Note that using a PostgreSQLConnectionLog will create huge amounts of information, and will have a negative impact on the performance ot the connection(s) being monitored.  Make sure you have plenty of space (memory / disk space) to hold your logs.
+
+Future versions of the logging facility will allow only specific kinds of message to be logged. 

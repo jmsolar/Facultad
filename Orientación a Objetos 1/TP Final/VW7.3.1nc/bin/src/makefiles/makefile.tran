@@ -1,0 +1,17 @@
+# * SccsId is  "@(#)makefile.tran	58.10 04/06/05";*/
+# ************************************************************************
+# * File: makefile.tran
+# *
+# * Subsystem makefile for HPS N-method allocator and translator.
+# * This is invoked for a normal build.
+# *
+# *	Copyright (C) 1999 Cincom Systems, Inc.
+# *	Santa Clara, California.  All Rights Reserved.
+# *
+# *	UNPUBLISHED, CONFIDENTIAL AND PROPRIETARY.
+# ************************************************************************
+#
+SUBSYS= tran
+
+include src/makefiles/makefile.both
+include tran.dep

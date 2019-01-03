@@ -1,0 +1,62 @@
+# * SccsId is @(#)makefile.guiX11	58.10 04/06/05
+# ************************************************************************
+# * File: makefile.guiX11
+# *
+# * Subsystem makefile for HPS using X11 GUI.
+# *
+# *	Copyright (C) 2002 Cincom Systems, Inc.
+# *	Santa Clara, California.  All Rights Reserved.
+# *
+# *	UNPUBLISHED, CONFIDENTIAL AND PROPRIETARY.
+# ************************************************************************
+#
+SUBSYS=platgui
+SUBSYSDIR=$(HPSSDIR)/plat
+
+OBJS= \
+x11Anim.$(OBJ) \
+x11Canvas.$(OBJ) \
+x11Curs.$(OBJ) \
+x11Error.$(OBJ) \
+x11Event.$(OBJ) \
+x11Font.$(OBJ) \
+x11GC.$(OBJ) \
+x11Graphics.$(OBJ) \
+x11Herald.$(OBJ) \
+x11Image.$(OBJ) \
+x11InputManager.$(OBJ) \
+x11LoadGUI.$(OBJ) \
+x11Motif.$(OBJ) \
+x11Resource.$(OBJ) \
+x11Sel.$(OBJ) \
+$(SPLASH_OBJ) \
+x11Win.$(OBJ)
+
+CSRCS=  \
+x11Anim.c \
+x11Canvas.c \
+x11Curs.c \
+x11Error.c \
+x11Event.c \
+x11Font.c \
+x11GC.c \
+x11Graphics.c \
+x11Herald.c \
+x11Image.c \
+x11InputManager.c \
+x11LoadGUI.c \
+x11Motif.c \
+x11Resource.c \
+x11Sel.c \
+x11Win.c
+
+SSRCS=
+
+### Subsystem target.
+
+$(SUBSYS).$(OBJ): $(OBJS)
+	$(LD) $(LDFLAGS) -o $@ $(OBJS)
+
+include src/makefiles/makefile.include
+
+include platgui.dep

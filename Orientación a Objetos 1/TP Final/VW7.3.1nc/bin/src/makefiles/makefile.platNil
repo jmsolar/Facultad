@@ -1,0 +1,69 @@
+# * SccsId is  @(#)makefile.platNil	58.10 04/06/05
+# ************************************************************************
+# * File: makefile.nil
+# *
+# * Subsystem makefile for HPS nil platform.
+# *
+# *	Copyright (C) 1999 Cincom Systems, Inc.
+# *	Santa Clara, California.  All Rights Reserved.
+# *
+# *	UNPUBLISHED, CONFIDENTIAL AND PROPRIETARY.
+# ************************************************************************
+#
+SUBSYS= plat
+SUBSYSDIR= $(HPSSDIR)/plat
+
+OBJS=\
+nilAlarm.$(OBJ) \
+nilCallC.$(OBJ) \
+nilCallback.$(OBJ) \
+nilDir.$(OBJ) \
+nilDynamicLoad.$(OBJ) \
+nilECode.$(OBJ) \
+nilError.$(OBJ) \
+nilFile.$(OBJ) \
+nilIcache.$(OBJ) \
+nilIpc.$(OBJ) \
+nilLeave.$(OBJ) \
+nilMain.$(OBJ) \
+nilMapFile.$(OBJ) \
+nilMem.$(OBJ) \
+nilMisc.$(OBJ) \
+nilPlat.$(OBJ) \
+nilProc.$(OBJ) \
+nilSerial.$(OBJ) \
+nilSig.$(OBJ) \
+nilSock.$(OBJ) \
+nilTime.$(OBJ) \
+nilUtil.$(OBJ)
+
+CSRCS=\
+nilAlarm.c \
+nilCallC.c \
+nilCallback.c \
+nilDir.c \
+nilDynamicLoad.c \
+nilECode.c \
+nilError.c \
+nilFile.c \
+nilIcache.c \
+nilIpc.c \
+nilLeave.c \
+nilMain.c \
+nilMapFile.c \
+nilMem.c \
+nilMisc.c \
+nilPlat.c \
+nilProc.c \
+nilSerial.c \
+nilSig.c \
+nilSock.c \
+nilTime.c \
+nilUtil.c
+
+$(SUBSYS).$(OBJ): $(OBJS)
+	$(LD) $(LDFLAGS) -o $@ $(OBJS)
+
+include src/makefiles/makefile.include
+
+include plat.dep

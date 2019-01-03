@@ -1,0 +1,88 @@
+ vwntconsole
+
+ Timestamp is 4255799d (Thu Apr 07 11:19:09 2005)
+
+ Preferred load address is 00400000
+
+ Start         Length     Name                   Class
+ 0001:00000000 00000202H .text                   CODE
+ 0002:00000000 0000004cH .idata$5                DATA
+ 0002:00000050 0000007cH .rdata                  DATA
+ 0002:000000cc 00000028H .idata$2                DATA
+ 0002:000000f4 00000014H .idata$3                DATA
+ 0002:00000108 0000004cH .idata$4                DATA
+ 0002:00000154 00000108H .idata$6                DATA
+ 0002:0000025c 00000000H .edata                  DATA
+ 0003:00000000 00000004H .CRT$XCA                DATA
+ 0003:00000004 00000004H .CRT$XCZ                DATA
+ 0003:00000008 00000004H .CRT$XIA                DATA
+ 0003:0000000c 00000004H .CRT$XIZ                DATA
+ 0003:00000010 00000010H .data                   DATA
+ 0003:00000020 0000001cH .bss                    DATA
+ 0004:00000000 000000a0H .rsrc$01                DATA
+ 0004:000000a0 00000300H .rsrc$02                DATA
+
+  Address         Publics by Value              Rva+Base     Lib:Object
+
+ 0001:00000000       _main                      00401000 f   ntexe.obj
+ 0001:00000020       _WinMain@16                00401020 f   ntexe.obj
+ 0001:00000040       _dllCMain                  00401040 f   vwntoeimport:vwntoe.dll
+ 0001:00000046       _dllWMain                  00401046 f   vwntoeimport:vwntoe.dll
+ 0001:0000004c       _mainCRTStartup            0040104c f   MSVCRT:crtexe.obj
+ 0001:0000015c       __exit                     0040115c f   MSVCRT:MSVCRT.dll
+ 0001:00000162       __XcptFilter               00401162 f   MSVCRT:MSVCRT.dll
+ 0001:00000168       _exit                      00401168 f   MSVCRT:MSVCRT.dll
+ 0001:0000016e       ___p___initenv             0040116e f   MSVCRT:MSVCRT.dll
+ 0001:00000174       ___getmainargs             00401174 f   MSVCRT:MSVCRT.dll
+ 0001:0000017a       __initterm                 0040117a f   MSVCRT:MSVCRT.dll
+ 0001:00000180       __setdefaultprecision      00401180 f   MSVCRT:fp8.obj
+ 0001:00000192       ___setusermatherr          00401192 f   MSVCRT:MSVCRT.dll
+ 0001:00000198       __matherr                  00401198 f   MSVCRT:merr.obj
+ 0001:0000019b       __setargv                  0040119b f   MSVCRT:dllargv.obj
+ 0001:0000019c       ___p__commode              0040119c f   MSVCRT:MSVCRT.dll
+ 0001:000001a2       ___p__fmode                004011a2 f   MSVCRT:MSVCRT.dll
+ 0001:000001a8       __onexit                   004011a8 f   MSVCRT:atonexit.obj
+ 0001:000001d4       _atexit                    004011d4 f   MSVCRT:atonexit.obj
+ 0001:000001e6       ___set_app_type            004011e6 f   MSVCRT:MSVCRT.dll
+ 0001:000001f0       __except_handler3          004011f0 f   MSVCRT:MSVCRT.dll
+ 0001:000001f6       __controlfp                004011f6 f   MSVCRT:MSVCRT.dll
+ 0001:000001fc       ___dllonexit               004011fc f   MSVCRT:MSVCRT.dll
+ 0002:00000000       __imp____setusermatherr    00402000     MSVCRT:MSVCRT.dll
+ 0002:00000004       __imp___onexit             00402004     MSVCRT:MSVCRT.dll
+ 0002:00000008       __imp____dllonexit         00402008     MSVCRT:MSVCRT.dll
+ 0002:0000000c       __imp___exit               0040200c     MSVCRT:MSVCRT.dll
+ 0002:00000010       __imp___XcptFilter         00402010     MSVCRT:MSVCRT.dll
+ 0002:00000014       __imp__exit                00402014     MSVCRT:MSVCRT.dll
+ 0002:00000018       __imp____p___initenv       00402018     MSVCRT:MSVCRT.dll
+ 0002:0000001c       __imp____getmainargs       0040201c     MSVCRT:MSVCRT.dll
+ 0002:00000020       __imp___initterm           00402020     MSVCRT:MSVCRT.dll
+ 0002:00000024       __imp___adjust_fdiv        00402024     MSVCRT:MSVCRT.dll
+ 0002:00000028       __imp____p__commode        00402028     MSVCRT:MSVCRT.dll
+ 0002:0000002c       __imp____p__fmode          0040202c     MSVCRT:MSVCRT.dll
+ 0002:00000030       __imp____set_app_type      00402030     MSVCRT:MSVCRT.dll
+ 0002:00000034       __imp___except_handler3    00402034     MSVCRT:MSVCRT.dll
+ 0002:00000038       __imp___controlfp          00402038     MSVCRT:MSVCRT.dll
+ 0002:0000003c       \177MSVCRT_NULL_THUNK_DATA 0040203c     MSVCRT:MSVCRT.dll
+ 0002:00000040       __imp__dllWMain            00402040     vwntoeimport:vwntoe.dll
+ 0002:00000044       __imp__dllCMain            00402044     vwntoeimport:vwntoe.dll
+ 0002:00000048       \177vwntoe_NULL_THUNK_DATA 00402048     vwntoeimport:vwntoe.dll
+ 0002:000000cc       __IMPORT_DESCRIPTOR_vwntoe 004020cc     vwntoeimport:vwntoe.dll
+ 0002:000000e0       __IMPORT_DESCRIPTOR_MSVCRT 004020e0     MSVCRT:MSVCRT.dll
+ 0002:000000f4       __NULL_IMPORT_DESCRIPTOR   004020f4     vwntoeimport:vwntoe.dll
+ 0003:00000000       ___xc_a                    00403000     MSVCRT:cinitexe.obj
+ 0003:00000004       ___xc_z                    00403004     MSVCRT:cinitexe.obj
+ 0003:00000008       ___xi_a                    00403008     MSVCRT:cinitexe.obj
+ 0003:0000000c       ___xi_z                    0040300c     MSVCRT:cinitexe.obj
+ 0003:00000010       ___defaultmatherr          00403010     MSVCRT:merr.obj
+ 0003:00000020       __dowildcard               00403020     MSVCRT:wildcard.obj
+ 0003:00000024       __newmode                  00403024     MSVCRT:_newmode.obj
+ 0003:00000028       __commode                  00403028     MSVCRT:xncommod.obj
+ 0003:0000002c       __fmode                    0040302c     MSVCRT:xtxtmode.obj
+ 0003:00000030       ___onexitend               00403030     <common>
+ 0003:00000034       ___onexitbegin             00403034     <common>
+ 0003:00000038       __adjust_fdiv              00403038     <common>
+
+ entry point at        0001:0000004c
+
+ Static symbols
+

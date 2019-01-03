@@ -1,0 +1,46 @@
+### SccsId = @(#)ibm.fast.nb.makefile.vw7	58.10 04/06/05
+# Makefile for production AIX vw7.x engine
+#
+PROCESSOR= procRS60x
+PLATFORM= platRS6000
+GUI=X11
+NAME=vwibm
+#
+USG= -DUSG
+### Compiler switches
+CC=/usr/vac/bin/cc
+# Using arch==ppc since code generator is PowerPC specific.
+COPTS=-q32 -qarch=ppc -O2 -g
+
+THREADDEFS=-DNBAPI -D_REENTRANT -DPTHREADS
+OPTDEFS=-DHEEGPRIVATECM
+DEBUGDEFS=
+BASEDEFS=-DFIRENZE -D_BSD -Isrc/zlib
+CDEFS=$(BASEDEFS) $(OPTDEFS) $(THREADDEFS) $(DEBUGDEFS)
+
+ASFLAGS=-mppc
+
+LIBRARIES=-lm -lX11 -lld -lbsd -lpthreads -bexpall -brtl
+OBJ=o
+SHOBJ=so
+
+ZLIBSUBSYS=zlib # no default zlib.h on AIX so we build zlib ourselves
+ZLIBOBJ=zlib.o
+
+### Linker switches
+LD=/usr/ccs/bin/ld
+LDFLAGS=-r
+MAKE=/bin/make
+PLATOPTS= MDPP=./cccp MCPP=./cccp
+
+include src/makefiles/makefile.generic
+
+SPLASH=bits-vw50-e-4.h
+SPLASH_INC=src/makeplat/artwork
+
+herald.o: src/plat/x11Splash.c $(SPLASH_INC)/$(SPLASH)
+	$(CC) -c -I$(SPLASH_INC) -DSPLASH_H=\"$(SPLASH)\"  \
+            -o herald.o src/plat/x11Splash.c
+
+herald.so: herald.o makefile
+	/usr/bin/ld -o herald.so -G -bexpall -bnoentry herald.o
